@@ -430,11 +430,13 @@ const makeCardEditTemplate = () => (
   </article>`
 );
 
-const makeCardFilterTemplate = () => {
-  `<a href="#" class="board__filter">SORT BY DEFAULT</a>
-  <a href="#" class="board__filter">SORT BY DATE up</a>
-  <a href="#" class="board__filter">SORT BY DATE down</a>`
-}
+const makeCardFilterTemplate = () => (
+  `<div class="board__filter-list">
+    <a href="#" class="board__filter">SORT BY DEFAULT</a>
+    <a href="#" class="board__filter">SORT BY DATE up</a>
+    <a href="#" class="board__filter">SORT BY DATE down</a>
+  </div>`
+);
 
 const makeLoadMoreTemplate = () => (
   `<button class="load-more" type="button">load more</button>`
@@ -448,22 +450,23 @@ const mainContainer = document.querySelector(`.main`);
 const menuContainer = mainContainer.querySelector(`.control__btn-wrap`);
 const searchContainer = mainContainer.querySelector(`.main__search`);
 const filterContainer = mainContainer.querySelector(`.main__filter`);
-const cardFilterContainer = mainContainer.querySelector(`.board__filter-list`);
+const cardFilterContainer = mainContainer.querySelector(`.board__tasks-filter`);
 const cardTasksContainer = mainContainer.querySelector(`.board__tasks`);
+const cardTasksLoadBtnContainer = mainContainer.querySelector(`.board.container`);
 
 const renderMockComponents = () => {
   renderComponent(cardTasksContainer, makeCardEditTemplate());
   renderComponent(menuContainer, makeMenuTemplate());
   renderComponent(searchContainer, makeSearchTemplate());
   renderComponent(filterContainer, makeFilterTemplate());
-  renderComponent(cardFilterContainer, makeCardFilterTemplate());
 
+  renderComponent(cardFilterContainer, makeCardFilterTemplate());
 
   for (let i = 1; i <= CARDS_COUNT; i++) {
     renderComponent(cardTasksContainer, makeCardTemplate());
   }
 
-  renderComponent(cardTasksContainer, makeLoadMoreTemplate());
+  renderComponent(cardTasksLoadBtnContainer, makeLoadMoreTemplate());
 };
 
 renderMockComponents();
