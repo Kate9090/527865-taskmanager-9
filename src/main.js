@@ -3,8 +3,7 @@
 const CARDS_COUNT = 3;
 
 const makeMenuTemplate = () => (
-  `
-  <input
+  `<input
     type="radio"
     name="control"
     id="control__new-task"
@@ -25,25 +24,21 @@ const makeMenuTemplate = () => (
     id="control__statistic"
     class="control__input visually-hidden"
   />
-  <label for="control__statistic" class="control__label">STATISTICS</label>
-  `
+  <label for="control__statistic" class="control__label">STATISTICS</label>`
 );
 
 const makeSearchTemplate = () => (
-  `
-  <input
+  `<input
     type="text"
     id="search__input"
     class="search__input"
     placeholder="START TYPING — SEARCH BY WORD, #HASHTAG OR DATE"
   />
-  <label class="visually-hidden" for="search__input">Search</label>
-  `
+  <label class="visually-hidden" for="search__input">Search</label>`
 );
 
 const makeFilterTemplate = () => (
-  `
-  <input
+  `<input
     type="radio"
     id="filter__all"
     class="filter__input visually-hidden"
@@ -94,13 +89,11 @@ const makeFilterTemplate = () => (
     class="filter__input visually-hidden"
     name="filter"
   />
-  <label for="filter__archive" class="filter__label">Archive <span class="filter__archive-count">115</span></label>
-  `
+  <label for="filter__archive" class="filter__label">Archive <span class="filter__archive-count">115</span></label>`
 );
 
 const makeCardTemplate = () => (
-  `
-  <article class="card">
+  `<article class="card">
     <div class="card__form">
       <div class="card__inner">
         <div class="card__control">
@@ -158,13 +151,11 @@ const makeCardTemplate = () => (
         </div>
       </div>
     </div>
-  </article>
-  `
+  </article>`
 );
 
 const makeCardEditTemplate = () => (
-  `
-  <article class="card card--edit card--yellow card--repeat">
+  `<article class="card card--edit card--yellow card--repeat">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -407,18 +398,15 @@ const makeCardEditTemplate = () => (
         </div>
       </div>
     </form>
-  </article>
-  `
+  </article>`
 );
 
 const makeCardFilterTemplate = () => (
-  `
-  <div class="board__filter-list">
+  `<div class="board__filter-list">
     <a href="#" class="board__filter">SORT BY DEFAULT</a>
     <a href="#" class="board__filter">SORT BY DATE up</a>
     <a href="#" class="board__filter">SORT BY DATE down</a>
-  </div>
-  `
+  </div>`
 );
 
 const makeLoadMoreTemplate = () => (
