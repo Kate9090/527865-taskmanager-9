@@ -365,6 +365,7 @@ const makeCardFilterTemplate = () => (
 );
 
 
+
 /***/ }),
 
 /***/ "./src/components/card.js":
@@ -651,3 +652,4 @@ renderMockComponents();
 /***/ })
 
 /******/ });
+//# sourceMappingURL=bundle.js.map
