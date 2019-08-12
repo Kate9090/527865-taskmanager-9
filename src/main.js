@@ -1,5 +1,3 @@
-'use strict';
-
 const CARDS_COUNT = 3;
 
 const makeMenuTemplate = () => (
