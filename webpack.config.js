@@ -12,9 +12,6 @@ module.exports = {
     contentBase: path.join(__dirname, `public`),
     publicPath: 'http://localhost:8080/',
     compress: true,
-    // !/ Автоматическая перезагрузка страницы
-    // !/ Если не работает по стандартному URLу в браузере ‘http:!/localhost:8080’,
-    // !/ то добавьте к нему ‘/webpack-dev-server/‘: ‘http:!/localhost:8080/webpack-dev-server/'
     watchContentBase: true
     }
 };
