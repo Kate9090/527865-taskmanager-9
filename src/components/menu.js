@@ -22,4 +22,3 @@ export const makeMenuTemplate = () => (
   />
   <label for="control__statistic" class="control__label">STATISTICS</label>`
 );
-
