@@ -13,12 +13,11 @@
     "eslint": "6.1.0",
     "eslint-config-htmlacademy": "0.5.2",
     "webpack": "4.39.1",
-    "webpack-cli": "3.3.6"
+    "webpack-cli": "3.3.6",
+    "webpack-dev-server": "3.8.0"
   },
   "engines": {
     "node": "10"
   },
-  "dependencies": {
-    "webpack-dev-server": "3.8.0"
-  }
+  "dependencies": {}
 }
