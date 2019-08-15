@@ -20,7 +20,8 @@ export const getTask = () => ({
   isArchive: false,
 });
 
-// const filter = [{
-//   title: ``,
-//   count
-// }];
+export const getFilter = () => ({
+  title: [`All`,`Overdue`,`Today`,`Favorites`,`Repeating`,`Tags`,`Archive`],
+  count: 5
+  // 5this.title.map((item, i)=> i)
+});

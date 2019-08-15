@@ -5,7 +5,9 @@ import {makeFilterTemplate} from '../src/components/filter';
 import {makeLoadMoreTemplate} from '../src/components/load-more';
 import {makeMenuTemplate} from '../src/components/menu';
 import {makeSearchTemplate} from '../src/components/search';
-import {getTask} from './data';
+import {getTask,
+  getFilter
+} from './data';
 
 const CARDS_COUNT = 3;
 
@@ -19,13 +21,14 @@ const menuContainer = mainContainer.querySelector(`.main__control`);
 const renderMockComponents = () => {
   renderComponent(menuContainer, makeMenuTemplate(), `beforeend`);
   renderComponent(mainContainer, makeSearchTemplate(), `beforeend`);
-  renderComponent(mainContainer, makeFilterTemplate(), `beforeend`);
+  renderComponent(mainContainer, new Array(1).fill(getFilter()).map(makeFilterTemplate), `beforeend`);
+
   renderComponent(mainContainer, makeCardEditTemplate(),`beforeend`);
 
   const cardFilterContainer = mainContainer.querySelector(`.board`);
   const cardTasksContainer = cardFilterContainer.querySelector(`.board__tasks`);
-
   renderComponent(cardFilterContainer, makeCardFilterTemplate(), `afterbegin`);
+
   for (let i = 1; i <= CARDS_COUNT; i++) {
     renderComponent(cardTasksContainer, new Array(1).fill(getTask()).map(makeCardTemplate).join(``),`beforeend`);
   }
