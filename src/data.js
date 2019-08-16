@@ -16,12 +16,69 @@ export const getTask = () => ({
   },
   tags: new Set(`homework`, `theory`, `practice`, `intensive`, `keks`),
   color: [`black`, `yellow`, `blue`, `green`, `pink`],
-  isFavorite: false,
-  isArchive: false,
+  isFavorite: Boolean(Math.round(Math.random())),
+  isArchive: Boolean(Math.round(Math.random())),
+  isOverdue: Boolean(Math.round(Math.random())),
+  isToday: Boolean(Math.round(Math.random())),
+  isRepeating: Boolean(Math.round(Math.random())),
+  isTags: Boolean(Math.round(Math.random()))
 });
 
-export const getFilter = () => ({
-  title: [`All`,`Overdue`,`Today`,`Favorites`,`Repeating`,`Tags`,`Archive`],
-  count: 5
-  // 5this.title.map((item, i)=> i)
-});
+const getAllTasks = (tasks) => {
+  return tasks.length;
+};
+
+const getCountType = (tasks, filterKey) => {
+  return tasks.filter((el) => el[filterKey]).length;
+};
+
+export const getFilter = (tasks) => ([
+  {
+    title: `All`,
+    get count() {
+      return getAllTasks(tasks);
+    },
+  },
+  {
+    title: `Overdue`,
+    get count() {
+      return getCountType(tasks, this.flagName);
+    },
+    flagName: `isOverdue`,
+  },
+  {
+    title: `Today`,
+    get count() {
+      return getCountType(tasks, this.flagName);
+    },
+    flagName: `isToday`,
+  },
+  {
+    title: `Favorites`,
+    get count() {
+      return getCountType(tasks, this.flagName);
+    },
+    flagName: `isFavorites`,
+  },
+  {
+    title: `Repeating`,
+    get count() {
+      return getCountType(tasks, this.flagName);
+    },
+    flagName: `isRepeating`,
+  },
+  {
+    title: `Tags`,
+    get count() {
+      return getCountType(tasks, this.flagName);
+    },
+    flagName: `isTags`,
+  },
+  {
+    title: `Archive`,
+    get count() {
+      return getCountType(tasks, this.flagName);
+    },
+    flagName: `isArchive`,
+  }
+]);

@@ -7,7 +7,7 @@ export const makeCardTemplate = ({
   tags,
   color
 }) => (
-  `<article class="card card--${color[Math.floor(Math.random() * 5)]} ${Object.keys(repeatingDays).some(day => repeatingDays[day]) ? `card--repeat` : ``}">
+  `<article class="card card--${color[Math.floor(Math.random() * 5)]} ${Object.keys(repeatingDays).some((day) => repeatingDays[day]) ? `card--repeat` : ``}">
     <div class="card__form">
       <div class="card__inner">
         <div class="card__control">
@@ -43,10 +43,8 @@ export const makeCardTemplate = ({
             </div>
             <div class="card__hashtag">
               <div class="card__hashtag-list">
-                ${Array.from(tags).slice(0, COUNT_TAG).map(tag => `<span class="card__hashtag-inner">
-                    <span class="card__hashtag-name">#${tag}</span></span>`
-                  ).join(``)
-                }
+                ${Array.from(tags).slice(0, COUNT_TAG).map((tag) => `<span class="card__hashtag-inner">
+                    <span class="card__hashtag-name">#${tag}</span></span>`).join(``)}
               </div>
             </div>
           </div>

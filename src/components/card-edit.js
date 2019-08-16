@@ -1,7 +1,9 @@
 export const makeCardEditTemplate = ({
   color,
   tags,
-  repeatingDays
+  repeatingDays,
+  description,
+  dueDate,
 }) => (
   `<section class="board container">
     <div class="board__tasks">
@@ -30,7 +32,7 @@ export const makeCardEditTemplate = ({
                   class="card__text"
                   placeholder="Start typing your text here..."
                   name="text"
-                >Here is a card with filled data</textarea>
+                >${description}</textarea>
               </label>
             </div>
             <div class="card__settings">
@@ -46,7 +48,7 @@ export const makeCardEditTemplate = ({
                         type="text"
                         placeholder=""
                         name="date"
-                        value="23 September 11:15 PM"
+                        value="${new Date(dueDate).toDateString()}"
                       />
                     </label>
                   </fieldset>
@@ -55,21 +57,20 @@ export const makeCardEditTemplate = ({
                   </button>
                   <fieldset class="card__repeat-days">
                     <div class="card__repeat-days-inner">
-                      ${Object.keys(repeatingDays).map(day => `<input
+                      ${Object.keys(repeatingDays).map((day) => `<input
                           class="visually-hidden card__repeat-day-input"
                           type="checkbox"
                           id="repeat-${repeatingDays[day]}-4"
                           name="repeat"
                           value="${repeatingDays[day]}"
                         />
-                        <label class="card__repeat-day" for="repeat-${repeatingDays[day]}-4">${repeatingDays[day]}</label>`
-                      ).join(``)}
+                        <label class="card__repeat-day" for="repeat-${repeatingDays[day]}-4">${repeatingDays[day]}</label>`).join(``)}
                     </div>
                   </fieldset>
                 </div>
                 <div class="card__hashtag">
                   <div class="card__hashtag-list">
-                    ${Array.from(tags).map(tag => `<span class="card__hashtag-inner">
+                    ${Array.from(tags).map((tag) => `<span class="card__hashtag-inner">
                         <input
                           type="hidden"
                           name="hashtag"
@@ -82,8 +83,7 @@ export const makeCardEditTemplate = ({
                         <button type="button" class="card__hashtag-delete">
                           delete
                         </button>
-                      </span>`
-                    ).join(``)}
+                      </span>`).join(``)}
                   </div>
                   <label>
                     <input
@@ -98,7 +98,7 @@ export const makeCardEditTemplate = ({
               <div class="card__colors-inner">
                 <h3 class="card__colors-title">Color</h3>
                 <div class="card__colors-wrap">
-                  ${color.map(item => `<input
+                  ${color.map((item) => `<input
                     type="radio"
                     id="color-black-4"
                     class="card__color-input card__color-input--${item} visually-hidden"
@@ -110,8 +110,7 @@ export const makeCardEditTemplate = ({
                     class="card__color card__color--${item}"
                   >
                     ${item}
-                  </label>`
-                  ).join(``)}
+                  </label>`).join(``)}
                 </div>
               </div>
             </div>

@@ -5,11 +5,10 @@ import {makeFilterTemplate} from '../src/components/filter';
 import {makeLoadMoreTemplate} from '../src/components/load-more';
 import {makeMenuTemplate} from '../src/components/menu';
 import {makeSearchTemplate} from '../src/components/search';
-import {getTask,
-  getFilter
-} from './data';
+import {getTask, getFilter} from './data';
 
-const CARDS_COUNT = 8;
+let CARDS_COUNT = 7;
+const PARTIALLY_CARDS_COUNT = 8;
 
 const renderComponent = (parent, child, place) => {
   parent.insertAdjacentHTML(place, child);
@@ -21,27 +20,31 @@ const menuContainer = mainContainer.querySelector(`.main__control`);
 const renderMockComponents = () => {
   renderComponent(menuContainer, makeMenuTemplate(), `beforeend`);
   renderComponent(mainContainer, makeSearchTemplate(), `beforeend`);
-  renderComponent(mainContainer, new Array(1).fill(getFilter()).map(makeFilterTemplate), `beforeend`);
 
-  renderComponent(mainContainer, new Array(1).fill(getTask()).map(makeCardEditTemplate), `beforeend`);
+  const allTasks = (card_count) => new Array(card_count).fill(``).map(getTask);
+  const tasks = allTasks(CARDS_COUNT);
+
+  renderComponent(mainContainer, makeFilterTemplate(getFilter(tasks)), `beforeend`);
+  renderComponent(mainContainer, makeCardEditTemplate(getTask()), `beforeend`);
 
   const cardFilterContainer = mainContainer.querySelector(`.board`);
   const cardTasksContainer = cardFilterContainer.querySelector(`.board__tasks`);
-  renderComponent(cardFilterContainer, makeCardFilterTemplate(), `afterbegin`);
 
-  for (let i = 1; i <= CARDS_COUNT; i++) {
+  for (let i = 0; i <= CARDS_COUNT; i++) {
     renderComponent(cardTasksContainer, new Array(1).fill(getTask()).map(makeCardTemplate).join(``),`beforeend`);
   }
   renderComponent(cardFilterContainer, makeLoadMoreTemplate(), `beforeend`);
 
   const btnLoadMore = mainContainer.querySelector(`.load-more`);
   btnLoadMore.addEventListener('click', () => {
-    for (let i = 1; i <= CARDS_COUNT; i++) {
+    for (let i = 0; i <= PARTIALLY_CARDS_COUNT; i++) {
       renderComponent(cardTasksContainer, new Array(1).fill(getTask()).map(makeCardTemplate).join(``),`beforeend`);
     }
+    CARDS_COUNT = CARDS_COUNT + PARTIALLY_CARDS_COUNT;
+    if (CARDS_COUNT > 20) {
+      btnLoadMore.parentNode.removeChild(btnLoadMore);
+    }
   })
-
 };
 
 renderMockComponents();
-
