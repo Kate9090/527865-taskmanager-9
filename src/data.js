@@ -14,7 +14,7 @@ export const getTask = () => ({
     'sa': false,
     'su': false
   },
-  tags: new Set(`homework`, `theory`, `practice`, `intensive`, `keks`),
+  tags: new Set([`homework`, `theory`, `practice`, `intensive`, `keks`]),
   color: [`black`, `yellow`, `blue`, `green`, `pink`],
   isFavorite: Boolean(Math.round(Math.random())),
   isArchive: Boolean(Math.round(Math.random())),
