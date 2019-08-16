@@ -9,7 +9,7 @@ import {getTask,
   getFilter
 } from './data';
 
-const CARDS_COUNT = 3;
+const CARDS_COUNT = 8;
 
 const renderComponent = (parent, child, place) => {
   parent.insertAdjacentHTML(place, child);
@@ -33,6 +33,15 @@ const renderMockComponents = () => {
     renderComponent(cardTasksContainer, new Array(1).fill(getTask()).map(makeCardTemplate).join(``),`beforeend`);
   }
   renderComponent(cardFilterContainer, makeLoadMoreTemplate(), `beforeend`);
+
+  const btnLoadMore = mainContainer.querySelector(`.load-more`);
+  btnLoadMore.addEventListener('click', () => {
+    for (let i = 1; i <= CARDS_COUNT; i++) {
+      renderComponent(cardTasksContainer, new Array(1).fill(getTask()).map(makeCardTemplate).join(``),`beforeend`);
+    }
+  })
+
 };
 
 renderMockComponents();
+
