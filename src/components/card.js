@@ -1,4 +1,4 @@
-const COUNT_TAG = Math.floor(Math.random * 3);
+const COUNT_TAG = Math.floor(Math.random() * 3);
 
 export const makeCardTemplate = ({
   description,
@@ -7,7 +7,7 @@ export const makeCardTemplate = ({
   tags,
   color
 }) => (
-  `<article class="card card--${color} ${Object.keys(repeatingDays).some(day => repeatingDays[day]) ? `card--repeat` : ``}">
+  `<article class="card card--${color[Math.floor(Math.random() * 5)]} ${Object.keys(repeatingDays).some(day => repeatingDays[day]) ? `card--repeat` : ``}">
     <div class="card__form">
       <div class="card__inner">
         <div class="card__control">

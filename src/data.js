@@ -15,7 +15,7 @@ export const getTask = () => ({
     'su': false
   },
   tags: new Set(`homework`, `theory`, `practice`, `intensive`, `keks`),
-  color: [`black`, `yellow`, `blue`, `green`, `pink`][Math.floor(Math.random() * 5)],
+  color: [`black`, `yellow`, `blue`, `green`, `pink`],
   isFavorite: false,
   isArchive: false,
 });

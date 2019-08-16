@@ -23,7 +23,7 @@ const renderMockComponents = () => {
   renderComponent(mainContainer, makeSearchTemplate(), `beforeend`);
   renderComponent(mainContainer, new Array(1).fill(getFilter()).map(makeFilterTemplate), `beforeend`);
 
-  renderComponent(mainContainer, makeCardEditTemplate(),`beforeend`);
+  renderComponent(mainContainer, new Array(1).fill(getTask()).map(makeCardEditTemplate), `beforeend`);
 
   const cardFilterContainer = mainContainer.querySelector(`.board`);
   const cardTasksContainer = cardFilterContainer.querySelector(`.board__tasks`);
