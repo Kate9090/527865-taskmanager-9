@@ -22,10 +22,12 @@ const renderMockComponents = () => {
   renderComponent(menuContainer, makeMenuTemplate(), `beforeend`);
   renderComponent(mainContainer, makeSearchTemplate(), `beforeend`);
 
-  const allTasks = (card_count) => new Array(card_count).fill(``).map(() => createTask);
-  const tasks = allTasks(CARDS_COUNT);
+  const allTasks = [];
+  for (let i = 0; i <= CARDS_COUNT; i++) {
+    allTasks.push(createTask());
+  }
 
-  renderComponent(mainContainer, makeFilterTemplate(createFilter(tasks)), `beforeend`);
+  renderComponent(mainContainer, makeFilterTemplate(createFilter(allTasks)), `beforeend`);
   renderComponent(mainContainer, makeCardEditTemplate(createTask()), `beforeend`);
 
   const cardFilterContainer = mainContainer.querySelector(`.board`);
