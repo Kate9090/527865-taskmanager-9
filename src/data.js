@@ -1,5 +1,4 @@
 const randomCount = (limit) => Math.floor(Math.random() * limit);
-
 const randomBoolean = () => Boolean(Math.round(Math.random()));
 
 export const createTask = () => ({
