@@ -4,10 +4,10 @@ export const makeCardTemplate = ({
   repeatingDays,
   tags = ``,
   color,
-  startCount = Math.floor(Math.random() * 3),
-  endCount = 1 + Math.floor(Math.random() * 2),
+  startCount,
+  endCount,
 }) => (
-  `<article class="card card--${color[Math.floor(Math.random() * 5)]} ${Object.keys(repeatingDays).some((day) => repeatingDays[day]) ? `card--repeat` : ``}">
+  `<article class="card card--${color} ${Object.keys(repeatingDays).some((day) => repeatingDays[day]) ? `card--repeat` : ``}">
     <div class="card__form">
       <div class="card__inner">
         <div class="card__control">

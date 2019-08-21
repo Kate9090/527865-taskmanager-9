@@ -1,5 +1,5 @@
 export const makeCardEditTemplate = ({
-  color,
+  colorArray,
   tags,
   repeatingDays,
   description,
@@ -98,7 +98,7 @@ export const makeCardEditTemplate = ({
               <div class="card__colors-inner">
                 <h3 class="card__colors-title">Color</h3>
                 <div class="card__colors-wrap">
-                  ${color.map((item) => `<input
+                  ${colorArray.map((item) => `<input
                     type="radio"
                     id="color-black-4"
                     class="card__color-input card__color-input--${item} visually-hidden"
