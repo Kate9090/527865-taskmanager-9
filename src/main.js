@@ -23,6 +23,10 @@ const renderMockComponents = () => {
   const allTasks = [];
   for (let i = 0; i <= CARDS_COUNT; i++) {
     allTasks.push(createTask());
+
+    if (typeof allTasks[i].isOverdue === 'function') {
+      console.log(allTasks[i].isOverdue())
+    }
   }
 
   renderComponent(mainContainer, makeFilterTemplate(createFilter(allTasks)), `beforeend`);

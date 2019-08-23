@@ -28,7 +28,7 @@ export const createTask = () => ({
   color: [`black`, `yellow`, `blue`, `green`, `pink`][randomCount(5)],
   startCount: randomCount(3),
   endCount: 1 + randomCount(3),
-  isFavorite: randomBoolean(),
+  isFavorites: randomBoolean(),
   isArchive: randomBoolean(),
   isOverdue() {
     if (new Date(this.dueDate) < Date.now()) {
@@ -51,7 +51,12 @@ const calculateAllTasks = (tasks) => {
 };
 
 const getCount = (tasks, flagName) => {
-  return tasks.filter((task) => task[flagName]).length;
+  return tasks.filter((task) => {
+    if (typeof task[flagName] === `boolean`) {
+      return task[flagName]
+    }
+    return task[flagName]()
+  }).length;
 };
 
 export const createFilter = (tasks) => ([
