@@ -1,5 +1,11 @@
 const randomCount = (limit) => Math.floor(Math.random() * limit);
 const randomBoolean = () => Boolean(Math.round(Math.random()));
+const randomSign = () => {
+  if (randomBoolean()) {
+    return 1;
+  }
+  return -1;
+}
 
 export const createTask = () => ({
   description: [
@@ -7,7 +13,7 @@ export const createTask = () => ({
     `Сделать домашку`,
     `Пройти интенсив на соточку`
   ][randomCount(3)],
-  dueDate: Date.now() + 1 + randomCount(7) * 24 * 60 * 60 * 1000,
+  dueDate: new Date(Date.now() + 1 + randomSign() * randomCount(7) * 24 * 60 * 60 * 1000),
   repeatingDays: {
     'mo': false,
     'tu': false,
@@ -17,21 +23,21 @@ export const createTask = () => ({
     'sa': false,
     'su': false
   },
-  tags: new Set([`homework`, `theory`, `practice`, `intensive`, `keks`]),
+  tags: [`homework`, `theory`, `practice`, `intensive`, `keks`],
   colorArray: [`black`, `yellow`, `blue`, `green`, `pink`],
   color: [`black`, `yellow`, `blue`, `green`, `pink`][randomCount(5)],
   startCount: randomCount(3),
-  endCount: 1 + randomCount(2),
+  endCount: 1 + randomCount(3),
   isFavorite: randomBoolean(),
   isArchive: randomBoolean(),
   isOverdue() {
-    if(dueDate < Date.now()) {
+    if (new Date(this.dueDate) < Date.now()) {
       return true
     }
     return false
   },
   isToday() {
-    if(dueDate > Date.now()) {
+    if (new Date(this.dueDate) > Date.now()) {
       return true
     }
     return false

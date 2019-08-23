@@ -2,7 +2,7 @@ export const makeCardTemplate = ({
   description,
   dueDate,
   repeatingDays,
-  tags = ``,
+  tags,
   color,
   startCount,
   endCount,

@@ -8,15 +8,13 @@ import {makeSearchTemplate} from '../src/components/search';
 import {createTask, createFilter} from './data';
 
 const CARDS_COUNT = 7;
-let mountOfCards = CARDS_COUNT;
 const PARTIALLY_CARDS_COUNT = 8;
-
+const mainContainer = document.querySelector(`.main`);
+const menuContainer = mainContainer.querySelector(`.main__control`);
 const renderComponent = (parent, child, place) => {
   parent.insertAdjacentHTML(place, child);
 };
-
-const mainContainer = document.querySelector(`.main`);
-const menuContainer = mainContainer.querySelector(`.main__control`);
+let mountOfCards = CARDS_COUNT;
 
 const renderMockComponents = () => {
   renderComponent(menuContainer, makeMenuTemplate(), `beforeend`);
