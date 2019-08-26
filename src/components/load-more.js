@@ -2,7 +2,7 @@ import {createElement} from '../utils';
 
 export class BtnLoadMore {
   constructor() {
-    this._element = null
+    this._element = null;
   }
 
   getElement() {
@@ -17,6 +17,6 @@ export class BtnLoadMore {
   }
 
   getTemplate() {
-    return `<button class="load-more" type="button">load more</button>`
+    return `<button class="load-more" type="button">load more</button>`;
   }
 }

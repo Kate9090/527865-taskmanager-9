@@ -2,7 +2,7 @@ import {createElement} from '../utils';
 
 export class TaskFilter {
   constructor() {
-    this._element = null
+    this._element = null;
   }
 
   getElement() {
@@ -25,6 +25,6 @@ export class TaskFilter {
       </div>
       <div class="board__tasks">
       </div>
-    </section>`
+    </section>`;
   }
 }

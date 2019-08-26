@@ -2,7 +2,7 @@ import {createElement} from '../utils';
 
 export class Search {
   constructor() {
-    this._element = null
+    this._element = null;
   }
 
   getElement() {
@@ -26,6 +26,6 @@ export class Search {
         placeholder="START TYPING — SEARCH BY WORD, #HASHTAG OR DATE"
       />
       <label class="visually-hidden" for="search__input">Search</label>
-    </section>`
+    </section>`;
   }
-};
+}

@@ -2,7 +2,7 @@ import {createElement} from '../utils';
 
 export class Menu {
   constructor() {
-    this._element = null
+    this._element = null;
   }
 
   getElement() {
@@ -40,6 +40,6 @@ export class Menu {
         class="control__input visually-hidden"
       />
       <label for="control__statistic" class="control__label">STATISTICS</label>
-    </section>`
+    </section>`;
   }
-};
+}

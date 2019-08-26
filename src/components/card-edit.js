@@ -10,10 +10,10 @@ export class TaskEdit {
   }) {
     this._colorArray = colorArray;
     this._description = description;
-    this._dueDate = dueDate,
-    this._repeatingDays = repeatingDays,
-    this._tags = tags,
-    this._element = null
+    this._dueDate = dueDate;
+    this._repeatingDays = repeatingDays;
+    this._tags = tags;
+    this._element = null;
   }
 
   getElement() {
@@ -141,6 +141,6 @@ export class TaskEdit {
           </div>
         </div>
       </form>
-    </article>`
+    </article>`;
   }
-};
+}

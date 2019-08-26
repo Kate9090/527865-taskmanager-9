@@ -11,13 +11,13 @@ export class Task {
     tags,
   }) {
     this._description = description;
-    this._dueDate = dueDate,
-    this._repeatingDays = repeatingDays,
-    this._tags = tags,
-    this._color = color,
-    this._startCount = startCount,
-    this._endCount = endCount,
-    this._element = null
+    this._dueDate = dueDate;
+    this._repeatingDays = repeatingDays;
+    this._tags = tags;
+    this._color = color;
+    this._startCount = startCount;
+    this._endCount = endCount;
+    this._element = null;
   }
 
   getElement() {
@@ -76,6 +76,6 @@ export class Task {
           </div>
         </div>
       </div>
-    </article>`
+    </article>`;
   }
-};
+}
