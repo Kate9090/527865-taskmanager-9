@@ -6,7 +6,7 @@ import {TaskEdit} from '../src/components/card-edit';
 import {TaskFilter} from '../src/components/card-filter';
 import {BtnLoadMore} from '../src/components/load-more';
 
-import {render, Position} from './utils';
+import {render, Position, removeElement} from './utils';
 import {createTask, createFilter} from './data';
 
 const TasksCount = {
@@ -97,7 +97,7 @@ btnLoadMoreContainer.addEventListener('click', () => {
   if (mountOfCards > TasksCount.MAX) {
     const newTaskMocks = new Array(mountOfCards - TasksCount.MAX).fill(``).map(createTask);
     newTaskMocks.forEach((taskMock) => renderTask(taskMock));
-    btnLoadMoreContainer.parentNode.removeChild(btnLoadMoreContainer);
+    removeElement(btnLoadMoreContainer);
   } else {
     const newTaskMocks = new Array(TasksCount.PARTIALLY_CARDS_COUNT).fill(``).map(createTask);
     newTaskMocks.forEach((taskMock) => renderTask(taskMock));

@@ -4,6 +4,10 @@ export const createElement = (template)  => {
   return newElement.firstChild;
 }
 
+export const removeElement = (element)  => {
+  element.parentNode.removeChild(element);
+}
+
 export const Position = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
