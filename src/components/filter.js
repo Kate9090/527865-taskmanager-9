@@ -1,6 +1,6 @@
 import {createElement} from '../utils';
 
-export class TaskEdit {
+export class Filter {
   constructor(filters) {
   this._filters = filters,
   this._element = null
