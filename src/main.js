@@ -90,16 +90,18 @@ taskMocks.forEach((taskMock) => renderTask(taskMock));
 renderBtnLoadMore();
 
 const btnLoadMoreContainer = taskContainer.querySelector(`.load-more`)
-let mountOfCards = TasksCount.LOAD;
+let mountOfTasks = TasksCount.LOAD;
 
 btnLoadMoreContainer.addEventListener('click', () => {
-  mountOfCards = mountOfCards + TasksCount.PARTIALLY_CARDS_COUNT;
-  if (mountOfCards > TasksCount.MAX) {
-    const newTaskMocks = new Array(mountOfCards - TasksCount.MAX).fill(``).map(createTask);
-    newTaskMocks.forEach((taskMock) => renderTask(taskMock));
+  let newTaskMocks = [];
+  mountOfTasks = mountOfTasks + TasksCount.PARTIALLY_CARDS_COUNT;
+  if (mountOfTasks > TasksCount.MAX) {
+    newTaskMocks = new Array(mountOfTasks - TasksCount.MAX).fill(``).map(createTask);
+    
     removeElement(btnLoadMoreContainer);
   } else {
-    const newTaskMocks = new Array(TasksCount.PARTIALLY_CARDS_COUNT).fill(``).map(createTask);
-    newTaskMocks.forEach((taskMock) => renderTask(taskMock));
+    newTaskMocks = new Array(TasksCount.PARTIALLY_CARDS_COUNT).fill(``).map(createTask);
+    
   }
+  newTaskMocks.forEach((taskMock) => renderTask(taskMock));
 });
