@@ -2,13 +2,13 @@ import {createElement} from '../utils';
 
 export class TaskEdit {
   constructor({
-    colorArray,
+    colors,
     description,
     dueDate,
     repeatingDays,
     tags,
   }) {
-    this._colorArray = colorArray;
+    this._colors = colors;
     this._description = description;
     this._dueDate = dueDate;
     this._repeatingDays = repeatingDays;
@@ -119,7 +119,7 @@ export class TaskEdit {
             <div class="card__colors-inner">
               <h3 class="card__colors-title">Color</h3>
               <div class="card__colors-wrap">
-                ${this._colorArray.map((item) => `<input
+                ${this._colors.map((item) => `<input
                   type="radio"
                   id="color-black-4"
                   class="card__color-input card__color-input--${item} visually-hidden"
