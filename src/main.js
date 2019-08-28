@@ -91,9 +91,9 @@ renderBtnLoadMore();
 
 const btnLoadMoreContainer = taskContainer.querySelector(`.load-more`);
 let mountOfTasks = TasksCount.LOAD;
+let newTaskMocks = [];
 
-btnLoadMoreContainer.addEventListener('click', () => {
-  let newTaskMocks = [];
+const onLoadMoreBtnClick = () => {
   mountOfTasks = mountOfTasks + TasksCount.PARTIALLY_CARDS_COUNT;
   if (mountOfTasks > TasksCount.MAX) {
     newTaskMocks = new Array(mountOfTasks - TasksCount.MAX).fill(``).map(createTask);
@@ -102,4 +102,6 @@ btnLoadMoreContainer.addEventListener('click', () => {
     newTaskMocks = new Array(TasksCount.PARTIALLY_CARDS_COUNT).fill(``).map(createTask);
   }
   newTaskMocks.forEach((taskMock) => renderTask(taskMock));
-});
+};
+
+btnLoadMoreContainer.addEventListener('click', onLoadMoreBtnClick);
