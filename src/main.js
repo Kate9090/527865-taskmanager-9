@@ -42,6 +42,8 @@ const renderTaskFilter= () => {
 const renderTask = (taskMock) => {
   const task = new Task(taskMock);
   const taskEdit = new TaskEdit(taskMock);
+  
+  const taskContainer = mainContainer.querySelector(`.board__tasks`);
 
   const onEscKeyDown = (evt) => {
     if (evt.key === `Escape` || evt.key === `Esc`) {
@@ -77,19 +79,10 @@ const renderTask = (taskMock) => {
 
 const renderBtnLoadMore = () => {
   const btnLoadMore = new BtnLoadMore();
+  const taskContainer = mainContainer.querySelector(`.board__tasks`);
   render(taskContainer, btnLoadMore.getElement(), Position.BEFOREEND);
 }
 
-renderHeader();
-renderFilter(filterMocks);
-renderTaskFilter();
-
-const taskContainer = mainContainer.querySelector(`.board__tasks`);
-taskMocks.forEach((taskMock) => renderTask(taskMock));
-
-renderBtnLoadMore();
-
-const btnLoadMoreContainer = taskContainer.querySelector(`.load-more`);
 let mountOfTasks = TasksCount.LOAD;
 let newTaskMocks = [];
 
@@ -104,4 +97,11 @@ const onLoadMoreBtnClick = () => {
   newTaskMocks.forEach((taskMock) => renderTask(taskMock));
 };
 
+renderHeader();
+renderFilter(filterMocks);
+renderTaskFilter();
+taskMocks.forEach((taskMock) => renderTask(taskMock));
+renderBtnLoadMore();
+
+const btnLoadMoreContainer = mainContainer.querySelector(`.load-more`);
 btnLoadMoreContainer.addEventListener('click', onLoadMoreBtnClick);
