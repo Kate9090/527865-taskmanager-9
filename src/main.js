@@ -22,7 +22,7 @@ const menuContainer = mainContainer.querySelector(`.main__control`);
 const taskMocks = new Array(TasksCount.LOAD).fill(``).map(createTask);
 const filterMocks = createFilter(allTasks);
 
-const countOfArchivedTasks = filterMocks[filterMocks.length-1].getValue();
+const countOfArchivedTasks = filterMocks.filter((item) => item.title === `Archive`)[0].getValue();
 
 const renderHeader = () => {
   const menu = new Menu();
@@ -83,6 +83,8 @@ const renderTask = (taskMock) => {
       taskContainer.replaceChild(task.getElement(), taskEdit.getElement());
       document.removeEventListener(`keydown`, onEscKeyDown);
     });
+
+  render(taskContainer, task.getElement(), Position.AFTERBEGIN);
 }
 
 const renderBtnLoadMore = () => {
@@ -108,10 +110,10 @@ const onLoadMoreBtnClick = () => {
 renderHeader();
 renderFilter(filterMocks);
 renderTaskFilter();
-if (countOfArchivedTasks < TasksCount.MAX) {
-  taskMocks.forEach((taskMock) => renderTask(taskMock));
-} else {
+if (TasksCount.MAX - countOfArchivedTasks === 0) {
   renderEmptyTasksList();
+} else {
+  taskMocks.forEach((taskMock) => renderTask(taskMock));
 }
 
 renderBtnLoadMore();
