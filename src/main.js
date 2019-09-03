@@ -22,7 +22,13 @@ const menuContainer = mainContainer.querySelector(`.main__control`);
 const taskMocks = new Array(TasksCount.LOAD).fill(``).map(createTask);
 const filterMocks = createFilter(allTasks);
 
-const countOfArchivedTasks = filterMocks.filter((item) => item.title === `Archive`)[0].getValue();
+
+const renderEmptyTasksList = () => {
+  const countOfArchivedTasks = filterMocks.find((item) => item.title === `Archive`).getValue();
+  const countOfAllTasks = filterMocks.find((item) => item.title === `All`).getValue();
+
+  return allTasks.length === 0 || countOfAllTasks === countOfArchivedTasks;
+}
 
 const renderHeader = () => {
   const menu = new Menu();
@@ -110,7 +116,7 @@ const onLoadMoreBtnClick = () => {
 renderHeader();
 renderFilter(filterMocks);
 renderTaskFilter();
-if (TasksCount.MAX - countOfArchivedTasks === 0) {
+if (notCompletedTasksCount()) {
   renderEmptyTasksList();
 } else {
   taskMocks.forEach((taskMock) => renderTask(taskMock));
