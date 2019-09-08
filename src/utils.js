@@ -1,17 +1,17 @@
-export const createElement = (template)  => {
+export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
   return newElement.firstChild;
-}
+};
 
-export const removeElement = (element)  => {
+export const removeElement = (element) => {
   element.parentNode.removeChild(element);
-}
+};
 
 export const Position = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
-}
+};
 
 export const render = (container, element, place) => {
   switch (place) {

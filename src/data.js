@@ -5,7 +5,7 @@ const randomSign = () => {
     return 1;
   }
   return -1;
-}
+};
 
 export const createTask = () => ({
   description: [
@@ -32,15 +32,15 @@ export const createTask = () => ({
   isArchive: randomBoolean(),
   isOverdue() {
     if (new Date(this.dueDate) < Date.now()) {
-      return true
+      return true;
     }
-    return false
+    return false;
   },
   isToday() {
     if (new Date(this.dueDate) > Date.now()) {
-      return true
+      return true;
     }
-    return false
+    return false;
   },
   isRepeating: randomBoolean(),
   isTags: randomBoolean(),
@@ -53,9 +53,9 @@ const calculateAllTasks = (tasks) => {
 const getCount = (tasks, flagName) => {
   return tasks.filter((task) => {
     if (typeof task[flagName] === `boolean`) {
-      return task[flagName]
+      return task[flagName];
     }
-    return task[flagName]()
+    return task[flagName]();
   }).length;
 };
 
