@@ -1,5 +1,3 @@
-import {createElement} from '../utils';
-
 export class TaskEdit {
   constructor({
     colors,
@@ -13,18 +11,6 @@ export class TaskEdit {
     this._dueDate = dueDate;
     this._repeatingDays = repeatingDays;
     this._tags = tags;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 
   getTemplate() {
