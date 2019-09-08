@@ -1,4 +1,6 @@
-export class Task {
+import {AbstractComponent} from './abstract-component';
+
+export class Task  extends  AbstractComponent {
   constructor({
     color,
     description,
@@ -8,6 +10,7 @@ export class Task {
     startCount,
     tags,
   }) {
+    super();
     this._description = description;
     this._dueDate = dueDate;
     this._repeatingDays = repeatingDays;

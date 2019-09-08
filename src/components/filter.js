@@ -1,5 +1,8 @@
-export class Filter {
+import {AbstractComponent} from './abstract-component';
+
+export class Filter extends  AbstractComponent {
   constructor(filters) {
+    super();
     this._filters = filters;
   }
 

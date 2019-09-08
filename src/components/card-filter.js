@@ -1,4 +1,10 @@
-export class TaskFilter {
+import {AbstractComponent} from './abstract-component';
+
+export class TaskFilter extends  AbstractComponent {
+  constructor() {
+    super();
+  }
+  
   getTemplate() {
     return `<section class="board container">
       <div class="board__filter-list">
