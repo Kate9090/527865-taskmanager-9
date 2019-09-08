@@ -13,4 +13,4 @@ const taskMocks = new Array(TasksCount.LOAD).fill(``).map(createTask);
 const filterMocks = createFilter(allTasks);
 
 const boardController = new BoardController(mainContainer, taskMocks);
-boardController._init(taskMocks, filterMocks, TasksCount.LOAD, TasksCount.PARTIALLY_CARDS_COUNT, TasksCount.MAX);
+boardController.init(taskMocks, filterMocks);

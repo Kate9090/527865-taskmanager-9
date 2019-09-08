@@ -1,6 +1,6 @@
 import {AbstractComponent} from './abstract-component';
 
-export class Task  extends  AbstractComponent {
+export class Task extends AbstractComponent {
   constructor({
     color,
     description,
