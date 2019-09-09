@@ -4,7 +4,7 @@ import {Search} from '../src/components/search';
 import {Task} from '../src/components/card';
 import {TaskEdit} from '../src/components/card-edit';
 import {TaskListEmpty} from '../src/components/card-list-empty';
-import {TaskFilter} from '../src/components/card-filter';
+import {Sort} from './components/sort';
 import {BtnLoadMore} from '../src/components/load-more';
 
 import {createTask} from './data';
@@ -39,7 +39,7 @@ export default class BoardController {
   }
 
   _renderTaskFilter() {
-    const taskFilter = new TaskFilter();
+    const taskFilter = new Sort();
     render(this._mainContainer, taskFilter.getElement(), Position.BEFOREEND);
   }
 
