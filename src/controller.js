@@ -2,6 +2,7 @@ import {Menu} from '../src/components/menu';
 import {Filter} from '../src/components/filter';
 import {Search} from '../src/components/search';
 import {Task} from '../src/components/card';
+import {TasksContainer} from '../src/components/board-tasks';
 import {TaskEdit} from '../src/components/card-edit';
 import {TaskListEmpty} from '../src/components/card-list-empty';
 import {Sort} from './components/sort';
@@ -11,9 +12,10 @@ import {createTask} from './data';
 import {render, removeElement, Position} from './utils';
 
 export default class BoardController {
-  constructor(container, data) {
+  constructor(container, tasks) {
     this._container = container;
-    this._data = data;
+    this._tasks = tasks;
+    this._sort = new Sort();
     this._mainContainer = document.querySelector(`.main`);
     this._menuContainer = this._mainContainer.querySelector(`.main__control`);
   }
@@ -38,15 +40,16 @@ export default class BoardController {
     render(this._mainContainer, filter.getElement(), Position.BEFOREEND);
   }
 
-  _renderTaskFilter() {
-    const taskFilter = new Sort();
-    render(this._mainContainer, taskFilter.getElement(), Position.BEFOREEND);
+  _renderSort() {
+    const tasksContainer = new TasksContainer();
+    render(this._mainContainer, this._sort.getElement(), Position.BEFOREEND);
+
+    render(this._sort.getElement(), tasksContainer.getElement(), Position.BEFOREEND);
   }
 
   _renderEmptyTasksList() {
     const taskListEmpty = new TaskListEmpty();
     const taskContainer = this._mainContainer.querySelector(`.board__tasks`);
-
     render(taskContainer, taskListEmpty.getElement(), Position.AFTERBEGIN);
   }
 
@@ -89,18 +92,48 @@ export default class BoardController {
 
   _renderBtnLoadMore() {
     const btnLoadMore = new BtnLoadMore();
-    const taskContainer = this._mainContainer.querySelector(`.board__tasks`);
+    const taskContainer = this._mainContainer.querySelector(`.board.container`);
     render(taskContainer, btnLoadMore.getElement(), Position.BEFOREEND);
   }
 
   init(taskMocks, filterMocks) {
     this._renderHeader();
     this._renderFilter(filterMocks);
-    this._renderTaskFilter();
+    this._renderSort();
+
+    const onSortingByType = (e) => {
+      e.preventDefault();
+
+      if (e.target.tagName !== `A`) {
+        return;
+      }
+
+      this._mainContainer.querySelector(`.board__tasks`).innerHTML = ``;
+
+      switch (e.target.dataset.sortType) {
+        case `date-up`:
+          this._sortedTasks = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
+          const sortedByDateUpTasks = this._sortedTasks.slice();
+          sortedByDateUpTasks.forEach((taskMock) => this._renderTask(taskMock));
+          break;
+        case `date-down`:
+          this._sortedTasks = this._tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
+          const sortedByDateDownTasks = this._sortedTasks.slice();
+          sortedByDateDownTasks.forEach((taskMock) => this._renderTask(taskMock));
+          break;
+        case `default`:
+          this._sortedTasks = null;
+          const sortedByDefaultTasks = this._tasks.slice();
+          sortedByDefaultTasks.forEach((taskMock) => this._renderTask(taskMock));
+          break;
+      }
+    }
+
     if (this._notCompletedTasksCount(taskMocks, filterMocks)) {
       this._renderEmptyTasksList();
     } else {
       taskMocks.forEach((taskMock) => this._renderTask(taskMock));
+      this._sort.getElement().addEventListener(`click`, (evt) => onSortingByType(evt));
     }
     this._renderBtnLoadMore();
 
