@@ -79,10 +79,10 @@ export default class BoardController {
       });
 
     taskEdit.getElement().querySelector(`.card__save`)
-      .addEventListener(`click`, () => {
-        this._tasksContainer.getElement().replaceChild(task.getElement(), taskEdit.getElement());
-
-        const formData = new FormData(taskEdit.getElement().querySelector(`.card-form`));
+      .addEventListener(`click`, (e) => {
+        e.preventDefault();
+        const formData = new FormData(taskEdit.getElement().querySelector(`.card__form`));
+        
         const entry = {
           description: formData.get(`text`),
           color: formData.get(`color`),
@@ -101,7 +101,11 @@ export default class BoardController {
             'su': false
           })
         };
+        console.log(entry)
         this._tasks[this._tasks.findIndex((it) => it === task)] = entry;
+        this._renderBoard(this._tasks);
+
+        this._tasksContainer.getElement().replaceChild(task.getElement(), taskEdit.getElement());
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
