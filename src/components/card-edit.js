@@ -2,22 +2,27 @@ import {AbstractComponent} from './abstract-component';
 
 export class TaskEdit extends AbstractComponent {
   constructor({
-    colors,
+    color,
     description,
     dueDate,
+    isRepeating,
     repeatingDays,
     tags,
+    
   }) {
     super();
-    this._colors = colors;
+    this._color = color;
     this._description = description;
     this._dueDate = dueDate;
+    this._isRepeating = isRepeating;
     this._repeatingDays = repeatingDays;
     this._tags = tags;
+
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return `<article class="card card--edit card--yellow card--repeat">
+    return `<article class="card card--edit card--${this._color} ${Object.values(this._repeatingDays).some((it) => it) ? `card--repeat` : `` }">
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__control">
@@ -65,26 +70,32 @@ export class TaskEdit extends AbstractComponent {
                 <button class="card__repeat-toggle" type="button">
                   repeat:<span class="card__repeat-status">yes</span>
                 </button>
-                <fieldset class="card__repeat-days">
+                <fieldset class="card__repeat-days>
                   <div class="card__repeat-days-inner">
-                    ${Object.keys(this._repeatingDays).map((day) => `<input
+                    ${Object.keys(this._repeatingDays).map((day) => (`
+                      <input
                         class="visually-hidden card__repeat-day-input"
                         type="checkbox"
-                        id="repeat-${this._repeatingDays[day]}-4"
+                        id="repeat-${day}-4"
                         name="repeat"
-                        value="${this._repeatingDays[day]}"
+                        value="${day}"
+                        ${this._repeatingDays[day] ? `checked` : ``}
                       />
-                      <label class="card__repeat-day" for="repeat-${this._repeatingDays[day]}-4">${day}</label>`).join(``)}
+                      <label class="card__repeat-day" for="repeat-${day}-4"
+                        >${day}</label
+                      >`
+                    )
+                    )}
                   </div>
                 </fieldset>
               </div>
               <div class="card__hashtag">
                 <div class="card__hashtag-list">
-                  ${Array.from(this._tags).map((tag) => `<span class="card__hashtag-inner">
+                  ${(Array.from(this._tags).map((tag) => `<span class="card__hashtag-inner">
                       <input
                         type="hidden"
                         name="hashtag"
-                        value="repeat"
+                        value="${tag}"
                         class="card__hashtag-hidden-input"
                       />
                       <p class="card__hashtag-name">
@@ -93,7 +104,7 @@ export class TaskEdit extends AbstractComponent {
                       <button type="button" class="card__hashtag-delete">
                         delete
                       </button>
-                    </span>`).join(``)}
+                    </span>`.trim())).join(``)}
                 </div>
                 <label>
                   <input
@@ -107,20 +118,79 @@ export class TaskEdit extends AbstractComponent {
             </div>
             <div class="card__colors-inner">
               <h3 class="card__colors-title">Color</h3>
+              <div class="card__colors-inner">
+              <h3 class="card__colors-title">Color</h3>
               <div class="card__colors-wrap">
-                ${this._colors.map((item) => `<input
+                <input
                   type="radio"
                   id="color-black-4"
-                  class="card__color-input card__color-input--${item} visually-hidden"
+                  class="card__color-input card__color-input--black visually-hidden"
                   name="color"
-                  value="${item}"
+                  value="black"
+                  
                 />
                 <label
-                  for="color-${item}-4"
-                  class="card__color card__color--${item}"
+                  for="color-black-4"
+                  class="card__color card__color--black"
+                  data-color-type="black"
+                  >black</label
                 >
-                  ${item}
-                </label>`).join(``)}
+                <input
+                  type="radio"
+                  id="color-yellow-4"
+                  class="card__color-input card__color-input--yellow visually-hidden"
+                  name="color"
+                  value="yellow"
+                  
+                />
+                <label
+                  for="color-yellow-4"
+                  class="card__color card__color--yellow"
+                  data-color-type="yellow"
+                  >yellow</label
+                >
+                <input
+                  type="radio"
+                  id="color-blue-4"
+                  class="card__color-input card__color-input--blue visually-hidden"
+                  name="color"
+                  value="blue"
+                  
+                />
+                <label
+                  for="color-blue-4"
+                  class="card__color card__color--blue"
+                  data-color-type="blue"
+                  >blue</label
+                >
+                <input
+                  type="radio"
+                  id="color-green-4"
+                  class="card__color-input card__color-input--green visually-hidden"
+                  name="color"
+                  value="green"
+                  
+                />
+                <label
+                  for="color-green-4"
+                  class="card__color card__color--green"
+                  data-color-type="green"
+                  >green</label
+                >
+                <input
+                  type="radio"
+                  id="color-pink-4"
+                  class="card__color-input card__color-input--pink visually-hidden"
+                  name="color"
+                  value="pink"
+                  
+                />
+                <label
+                  for="color-pink-4"
+                  class="card__color card__color--pink"
+                  data-color-type="pink"
+                  >pink</label
+                >
               </div>
             </div>
           </div>
@@ -132,4 +202,28 @@ export class TaskEdit extends AbstractComponent {
       </form>
     </article>`;
   }
+
+  _subscribeOnEvents() {
+		this.getElement()
+			.querySelector(`.card__hashtag-input`).addEventListener(`keydown`, (evt) => {
+			if (evt.key === `Enter`) {
+				evt.preventDefault();
+				this.getElement().querySelector(`.card__hashtag-list`).insertAdjacentHTML(`beforeend`, `<span class="card__hashtag-inner">
+            <input
+              type="hidden"
+              name="hashtag"
+              value="${evt.target.value}"
+              class="card__hashtag-hidden-input"
+            />
+            <p class="card__hashtag-name">
+              #${evt.target.value}
+            </p>
+            <button type="button" class="card__hashtag-delete">
+              delete
+            </button>
+          </span>`);
+				evt.target.value = ``;
+			}
+		});
+	}
 }

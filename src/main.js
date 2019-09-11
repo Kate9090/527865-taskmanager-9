@@ -1,4 +1,4 @@
-import BoardController from './controller';
+import BoardController from './controller/board-controller';
 import {createTask, createFilter} from './data';
 
 const TasksCount = {
