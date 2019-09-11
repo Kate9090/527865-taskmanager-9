@@ -9,12 +9,13 @@ import {Sort} from './components/sort';
 import {BtnLoadMore} from '../src/components/load-more';
 
 import {createTask} from './data';
-import {render, removeElement, Position} from './utils';
+import {render, removeElement, Position, unrender} from './utils';
 
 export default class BoardController {
   constructor(container, tasks) {
     this._container = container;
     this._tasks = tasks;
+    this._tasksContainer = new TasksContainer();
     this._sort = new Sort();
     this._mainContainer = document.querySelector(`.main`);
     this._menuContainer = this._mainContainer.querySelector(`.main__control`);
@@ -41,33 +42,29 @@ export default class BoardController {
   }
 
   _renderSort() {
-    const tasksContainer = new TasksContainer();
     render(this._mainContainer, this._sort.getElement(), Position.BEFOREEND);
-
-    render(this._sort.getElement(), tasksContainer.getElement(), Position.BEFOREEND);
+    render(this._sort.getElement(), this._tasksContainer.getElement(), Position.BEFOREEND);
   }
 
   _renderEmptyTasksList() {
     const taskListEmpty = new TaskListEmpty();
-    const taskContainer = this._mainContainer.querySelector(`.board__tasks`);
-    render(taskContainer, taskListEmpty.getElement(), Position.AFTERBEGIN);
+    render(this._tasksContainer.getElement(), taskListEmpty.getElement(), Position.AFTERBEGIN);
   }
 
   _renderTask(taskMock) {
     const task = new Task(taskMock);
     const taskEdit = new TaskEdit(taskMock);
-    const taskContainer = this._mainContainer.querySelector(`.board__tasks`);
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
-        taskContainer.replaceChild(task.getElement(), taskEdit.getElement());
+        this._tasksContainer.getElement().replaceChild(task.getElement(), taskEdit.getElement());
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
 
     task.getElement().querySelector(`.card__btn--edit`)
       .addEventListener(`click`, () => {
-        taskContainer.replaceChild(taskEdit.getElement(), task.getElement());
+        this._tasksContainer.getElement().replaceChild(taskEdit.getElement(), task.getElement());
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
@@ -83,17 +80,41 @@ export default class BoardController {
 
     taskEdit.getElement().querySelector(`.card__save`)
       .addEventListener(`click`, () => {
-        taskContainer.replaceChild(task.getElement(), taskEdit.getElement());
+        this._tasksContainer.getElement().replaceChild(task.getElement(), taskEdit.getElement());
+
+        const formData = new FormData(taskEdit.getElement().querySelector(`.card-form`));
+        const entry = {
+          description: formData.get(`text`),
+          color: formData.get(`color`),
+          tags: new Set(formData.getAll(`hashtag`)),
+          dueDate: new Date(formData.get(`date`)),
+          repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
+            acc[it] = true;
+            return acc;
+          }, {
+            'mo': false,
+            'tu': false,
+            'we': false,
+            'th': false,
+            'fr': false,
+            'sa': false,
+            'su': false
+          })
+        };
+        this._tasks[this._tasks.findIndex((it) => it === task)] = entry;
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
-    render(taskContainer, task.getElement(), Position.AFTERBEGIN);
+    render(this._tasksContainer.getElement(), task.getElement(), Position.BEFOREEND);
   }
 
   _renderBtnLoadMore() {
     const btnLoadMore = new BtnLoadMore();
-    const taskContainer = this._mainContainer.querySelector(`.board.container`);
-    render(taskContainer, btnLoadMore.getElement(), Position.BEFOREEND);
+    render(this._sort.getElement(), btnLoadMore.getElement(), Position.BEFOREEND);
+  }
+
+  _renderBoard(tasks) {
+    tasks.forEach((taskMock) => this._renderTask(taskMock));
   }
 
   init(taskMocks, filterMocks) {
@@ -108,23 +129,26 @@ export default class BoardController {
         return;
       }
 
-      this._mainContainer.querySelector(`.board__tasks`).innerHTML = ``;
+      this._tasksContainer.getElement().innerHTML = ``;
 
       switch (e.target.dataset.sortType) {
         case `date-up`:
           this._sortedTasks = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
           const sortedByDateUpTasks = this._sortedTasks.slice();
-          sortedByDateUpTasks.forEach((taskMock) => this._renderTask(taskMock));
+          this._renderBoard(sortedByDateUpTasks)
+          
           break;
         case `date-down`:
           this._sortedTasks = this._tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
           const sortedByDateDownTasks = this._sortedTasks.slice();
-          sortedByDateDownTasks.forEach((taskMock) => this._renderTask(taskMock));
+          this._renderBoard(sortedByDateDownTasks)
+          
           break;
         case `default`:
           this._sortedTasks = null;
           const sortedByDefaultTasks = this._tasks.slice();
-          sortedByDefaultTasks.forEach((taskMock) => this._renderTask(taskMock));
+          this._renderBoard(sortedByDefaultTasks);
+          
           break;
       }
     }
@@ -132,7 +156,7 @@ export default class BoardController {
     if (this._notCompletedTasksCount(taskMocks, filterMocks)) {
       this._renderEmptyTasksList();
     } else {
-      taskMocks.forEach((taskMock) => this._renderTask(taskMock));
+      this._renderBoard(taskMocks);
       this._sort.getElement().addEventListener(`click`, (evt) => onSortingByType(evt));
     }
     this._renderBtnLoadMore();
@@ -154,7 +178,7 @@ export default class BoardController {
       } else {
         newTaskMocks = new Array(TasksCount.PARTIALLY_CARDS_COUNT).fill(``).map(createTask);
       }
-      newTaskMocks.forEach((taskMock) => this._renderTask(taskMock));
+      this._renderBoard(newTaskMocks);
     };
 
     const btnLoadMoreContainer = this._mainContainer.querySelector(`.load-more`);

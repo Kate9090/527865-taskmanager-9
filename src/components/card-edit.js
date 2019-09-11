@@ -74,7 +74,7 @@ export class TaskEdit extends AbstractComponent {
                         name="repeat"
                         value="${this._repeatingDays[day]}"
                       />
-                      <label class="card__repeat-day" for="repeat-${this._repeatingDays[day]}-4">${this._repeatingDays[day]}</label>`).join(``)}
+                      <label class="card__repeat-day" for="repeat-${this._repeatingDays[day]}-4">${day}</label>`).join(``)}
                   </div>
                 </fieldset>
               </div>
