@@ -133,20 +133,20 @@ export default class BoardController {
 
       switch (e.target.dataset.sortType) {
         case `date-up`:
-          this._sortedTasks = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
+          this._sortedTasks = taskMocks.slice().sort((a, b) => a.dueDate - b.dueDate);
           const sortedByDateUpTasks = this._sortedTasks.slice();
           this._renderBoard(sortedByDateUpTasks)
           
           break;
         case `date-down`:
-          this._sortedTasks = this._tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
+          this._sortedTasks = taskMocks.slice().sort((a, b) => b.dueDate - a.dueDate);
           const sortedByDateDownTasks = this._sortedTasks.slice();
           this._renderBoard(sortedByDateDownTasks)
           
           break;
         case `default`:
           this._sortedTasks = null;
-          const sortedByDefaultTasks = this._tasks.slice();
+          const sortedByDefaultTasks = taskMocks.slice();
           this._renderBoard(sortedByDefaultTasks);
           
           break;
@@ -178,6 +178,7 @@ export default class BoardController {
       } else {
         newTaskMocks = new Array(TasksCount.PARTIALLY_CARDS_COUNT).fill(``).map(createTask);
       }
+      taskMocks = taskMocks.concat(newTaskMocks);
       this._renderBoard(newTaskMocks);
     };
 
