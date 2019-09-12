@@ -64,8 +64,6 @@ export default class BoardController {
   }
 
   _renderBtnLoadMore() {
-    
-
     unrender(this._btnLoadMore.getElement());
     this._btnLoadMore.removeElement();
 
@@ -109,7 +107,7 @@ export default class BoardController {
   }
 
   _onChangeView() {
-    this._subscriptions.forEach((it) => it())
+    this._subscriptions.forEach((it) => it());
   }
 
   init(taskMocks, filterMocks) {
@@ -136,23 +134,20 @@ export default class BoardController {
         case `date-up`:
           this._sortedTasks = taskMocks.slice().sort((a, b) => a.dueDate - b.dueDate);
           const sortedByDateUpTasks = this._sortedTasks.slice();
-          sortedByDateUpTasks.forEach((task) => this._renderTask(task))
-          
+          sortedByDateUpTasks.forEach((task) => this._renderTask(task));
           break;
         case `date-down`:
           this._sortedTasks = taskMocks.slice().sort((a, b) => b.dueDate - a.dueDate);
           const sortedByDateDownTasks = this._sortedTasks.slice();
-          sortedByDateDownTasks.forEach((task) => this._renderTask(task))
-          
+          sortedByDateDownTasks.forEach((task) => this._renderTask(task));
           break;
         case `default`:
           this._sortedTasks = null;
           const sortedByDefaultTasks = taskMocks.slice();
-          sortedByDefaultTasks.forEach((task) => this._renderTask(task))
-          
+          sortedByDefaultTasks.forEach((task) => this._renderTask(task));
           break;
       }
-    }
+    };
 
     let countForRender = TasksCount.LOAD;
 
@@ -160,7 +155,6 @@ export default class BoardController {
       this._renderEmptyTasksList();
     } else {
       this._renderBoard(taskMocks.slice(0, countForRender));
-      
       this._sort.getElement().addEventListener(`click`, (evt) => onSortingByType(evt));
     }
 
@@ -175,9 +169,9 @@ export default class BoardController {
         newTaskMocks = new Array(TasksCount.PARTIALLY_CARDS_COUNT).fill(``).map(createTask);
       }
       taskMocks = taskMocks.concat(newTaskMocks);
-      newTaskMocks.forEach((task) => this._renderTask(task))
+      newTaskMocks.forEach((task) => this._renderTask(task));
     };
-    
+
     this._renderBtnLoadMore();
     const btnLoadMoreContainer = this._mainContainer.querySelector(`.load-more`);
     btnLoadMoreContainer.addEventListener(`click`, onLoadMoreBtnClick);

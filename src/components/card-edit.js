@@ -8,7 +8,6 @@ export class TaskEdit extends AbstractComponent {
     isRepeating,
     repeatingDays,
     tags,
-    
   }) {
     super();
     this._color = color;
@@ -196,48 +195,48 @@ export class TaskEdit extends AbstractComponent {
   }
 
   _subscribeOnEvents() {
-		this.getElement()
-			.querySelector(`.card__hashtag-input`).addEventListener(`keydown`, (evt) => {
-			if (evt.key === `Enter`) {
-				evt.preventDefault();
-				this.getElement().querySelector(`.card__hashtag-list`).insertAdjacentHTML(`beforeend`, `<span class="card__hashtag-inner">
-            <input
-              type="hidden"
-              name="hashtag"
-              value="${evt.target.value}"
-              class="card__hashtag-hidden-input"
-            />
-            <p class="card__hashtag-name">
-              #${evt.target.value}
-            </p>
-            <button type="button" class="card__hashtag-delete">
-              delete
-            </button>
-          </span>`);
-				evt.target.value = ``;
-			}
-    });
-    
     this.getElement()
-			.querySelector(`.card__hashtag-list`).addEventListener(`click`, (evt) => {
+      .querySelector(`.card__hashtag-input`).addEventListener(`keydown`, (evt) => {
+        if (evt.key === `Enter`) {
+          evt.preventDefault();
+          this.getElement().querySelector(`.card__hashtag-list`).insertAdjacentHTML(`beforeend`, `<span class="card__hashtag-inner">
+              <input
+                type="hidden"
+                name="hashtag"
+                value="${evt.target.value}"
+                class="card__hashtag-hidden-input"
+              />
+              <p class="card__hashtag-name">
+                #${evt.target.value}
+              </p>
+              <button type="button" class="card__hashtag-delete">
+                delete
+              </button>
+            </span>`);
+          evt.target.value = ``;
+        }
+      });
+
+    this.getElement()
+      .querySelector(`.card__hashtag-list`).addEventListener(`click`, (evt) => {
         evt.preventDefault();
         if (evt.target.classList.contains(`card__hashtag-delete`) || evt.target.parentNode.contains.class(`card__hashtag-delete`)) {
-          evt.target.closest(`.card__hashtag-inner`).innerHTML = ``
+          evt.target.closest(`.card__hashtag-inner`).innerHTML = ``;
         }
-      })
+      });
 
     let flagDate = true;
     this.getElement()
-			.querySelector(`.card__date-deadline-toggle`).addEventListener(`click`, (evt) => {
+      .querySelector(`.card__date-deadline-toggle`).addEventListener(`click`, (evt) => {
         evt.preventDefault();
-        
+
         if (flagDate) {
           this.getElement().querySelector(`.card__date-deadline`).style.display = `none`;
-          this.getElement().querySelector(`.card__date-status`).innerHTML = `No`
+          this.getElement().querySelector(`.card__date-status`).innerHTML = `No`;
           flagDate = false;
         } else {
           this.getElement().querySelector(`.card__date-deadline`).style.display = `block`;
-          this.getElement().querySelector(`.card__date-status`).innerHTML = `yes`
+          this.getElement().querySelector(`.card__date-status`).innerHTML = `yes`;
           flagDate = true;
         }
       });
@@ -246,16 +245,16 @@ export class TaskEdit extends AbstractComponent {
     this.getElement()
       .querySelector(`.card__repeat-toggle`).addEventListener(`click`, (evt) => {
         evt.preventDefault();
-        
+
         if (flagRepeat) {
           this.getElement().querySelector(`.card__repeat-days`).style.display = `none`;
-          this.getElement().querySelector(`.card__repeat-status`).innerHTML = `No`
+          this.getElement().querySelector(`.card__repeat-status`).innerHTML = `No`;
           flagRepeat = false;
         } else {
           this.getElement().querySelector(`.card__repeat-days`).style.display = `block`;
-          this.getElement().querySelector(`.card__repeat-status`).innerHTML = `yes`
+          this.getElement().querySelector(`.card__repeat-status`).innerHTML = `yes`;
           flagRepeat = true;
         }
-      })
-	}
+      });
+  }
 }

@@ -1,6 +1,5 @@
 
 import {Task} from '../components/card';
-import {TasksContainer} from '../components/board-tasks';
 import {TaskEdit} from '../components/card-edit';
 
 import {render, Position} from '../utils';
@@ -47,7 +46,7 @@ export default class TaskController {
       .addEventListener(`click`, (e) => {
         e.preventDefault();
         const formData = new FormData(this._taskEdit.getElement().querySelector(`.card__form`));
-        
+
         const entry = {
           description: formData.get(`text`),
           color: formData.get(`color`),
@@ -72,7 +71,7 @@ export default class TaskController {
         this._onDataChange(entry, this._data);
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
-    
+
     const addToFavorite = this._taskEdit.getElement().querySelector(`.card__btn--favorites`);
     const addToArchive = this._taskEdit.getElement().querySelector(`.card__btn--archive`);
 
@@ -85,7 +84,7 @@ export default class TaskController {
       e.preventDefault();
       addToArchive.classList.toggle(`card__btn--disabled`);
     });
-      
+
     render(this._container.getElement(), this._taskView.getElement(), Position.BEFOREEND);
   }
 
