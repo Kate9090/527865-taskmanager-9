@@ -47,10 +47,12 @@ export default class BoardController {
     render(this._mainContainer, filter.getElement(), Position.BEFOREEND);
   }
 
-  _renderSort() {
+  _renderContainer() {
     render(this._mainContainer, this._board.getElement(), Position.BEFOREEND);
+  }
+
+  _renderSort() {
     render(this._board.getElement(), this._sort.getElement(), Position.AFTERBEGIN);
-    render(this._board.getElement(), this._tasksContainer.getElement(), Position.AFTERBEGIN);
   }
 
   _renderEmptyTasksList() {
@@ -84,26 +86,6 @@ export default class BoardController {
 
     this._renderBoard(this._tasks);
     this._renderBtnLoadMore();
-
-    // if (this._sortedTasks) {
-    //   taskIndex = this._sortedTasks.findIndex((it) => it === oldData);
-    //   this._sortedTasks[taskIndex] = newData;
-    // }
-
-    // unrender(this._tasksContainer.getElement());
-    // this._tasksContainer.removeElement();
-
-    // const thisTasks = this._sortedTasks ? this._sortedTasks.slice() : this._tasks.slice();
-    // render(this._board.getElement(), this._tasksContainer.getElement(), Position.BEFOREEND);
-
-    // if (taskIndex > 7) {
-    //   thisTasks.forEach((taskMock) => {
-    //     const taskController = new TaskController(this._tasksContainer, taskMock, this._onDataChange, this._onChangeView);
-    //     this._subscriptions.push(taskController.setDefaultView.bind(taskController));
-    //   });
-    // } else {
-    //   this._renderTasks(thisTasks);
-    // }
   }
 
   _onChangeView() {
@@ -116,14 +98,23 @@ export default class BoardController {
       LOAD: 8,
       PARTIALLY_CARDS_COUNT: 8
     };
+    let countForRender = TasksCount.LOAD;
 
     this._renderHeader();
     this._renderFilter(filterMocks);
+    this._renderContainer();
     this._renderSort();
 
     const onSortingByType = (e) => {
       e.preventDefault();
 
+      const onRerenderBtnLoadMore = () => {
+        if (countForRender < TasksCount.MAX) {
+          this._renderBtnLoadMore();
+          const btnLoadMoreContainer = this._mainContainer.querySelector(`.load-more`);
+          btnLoadMoreContainer.addEventListener(`click`, onLoadMoreBtnClick);
+        }
+      };
       if (e.target.tagName !== `A`) {
         return;
       }
@@ -133,23 +124,27 @@ export default class BoardController {
       switch (e.target.dataset.sortType) {
         case `date-up`:
           this._sortedTasks = taskMocks.slice().sort((a, b) => a.dueDate - b.dueDate);
-          const sortedByDateUpTasks = this._sortedTasks.slice();
-          sortedByDateUpTasks.forEach((task) => this._renderTask(task));
+          const sortedByDateUpTasks = this._sortedTasks.slice(0, countForRender);
+
+          this._renderBoard(sortedByDateUpTasks);
+          onRerenderBtnLoadMore();
           break;
         case `date-down`:
           this._sortedTasks = taskMocks.slice().sort((a, b) => b.dueDate - a.dueDate);
-          const sortedByDateDownTasks = this._sortedTasks.slice();
-          sortedByDateDownTasks.forEach((task) => this._renderTask(task));
+          const sortedByDateDownTasks = this._sortedTasks.slice(0, countForRender);
+
+          this._renderBoard(sortedByDateDownTasks);
+          onRerenderBtnLoadMore();
           break;
         case `default`:
           this._sortedTasks = null;
-          const sortedByDefaultTasks = taskMocks.slice();
-          sortedByDefaultTasks.forEach((task) => this._renderTask(task));
+          const sortedByDefaultTasks = taskMocks.slice(0, countForRender);
+
+          this._renderBoard(sortedByDefaultTasks);
+          onRerenderBtnLoadMore();
           break;
       }
     };
-
-    let countForRender = TasksCount.LOAD;
 
     if (this._notCompletedTasksCount(taskMocks, filterMocks)) {
       this._renderEmptyTasksList();
@@ -162,13 +157,13 @@ export default class BoardController {
 
     const onLoadMoreBtnClick = () => {
       countForRender = countForRender + TasksCount.PARTIALLY_CARDS_COUNT;
-      if (countForRender > TasksCount.MAX) {
+      if (countForRender >= TasksCount.MAX) {
         newTaskMocks = new Array(countForRender - TasksCount.MAX).fill(``).map(createTask);
+        // console.log(btnLoadMoreContainer.parentNode)
         removeElement(btnLoadMoreContainer);
       } else {
         newTaskMocks = new Array(TasksCount.PARTIALLY_CARDS_COUNT).fill(``).map(createTask);
       }
-      taskMocks = taskMocks.concat(newTaskMocks);
       newTaskMocks.forEach((task) => this._renderTask(task));
     };
 

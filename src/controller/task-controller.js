@@ -1,6 +1,9 @@
 
 import {Task} from '../components/card';
 import {TaskEdit} from '../components/card-edit';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/light.css';
 
 import {render, Position} from '../utils';
 
@@ -17,6 +20,11 @@ export default class TaskController {
   }
 
   create() {
+    flatpickr(this._taskEdit.getElement().querySelector(`.card__date`), {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._data.dueDate,
+    });
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
         this._container.getElement().replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
@@ -87,6 +95,7 @@ export default class TaskController {
 
     render(this._container.getElement(), this._taskView.getElement(), Position.BEFOREEND);
   }
+
 
   setDefaultView() {
     if (this._container.getElement().contains(this._taskEdit.getElement())) {
