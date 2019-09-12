@@ -11,8 +11,8 @@ export default class TaskController {
     this._data = data;
     this._taskView = new Task(data);
     this._taskEdit = new TaskEdit(data);
-    this._container = new TasksContainer();
     this._onDataChange = onDataChange;
+    this._onChangeView = onChangeView;
 
     this.create();
   }
@@ -20,14 +20,16 @@ export default class TaskController {
   create() {
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
-        this._tasksContainer.getElement().replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
+        this._container.getElement().replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
 
     this._taskView.getElement().querySelector(`.card__btn--edit`)
-      .addEventListener(`click`, () => {
-        // this._tasksContainer.getElement().replaceChild(taskEdit.getElement(), task.getElement());
+      .addEventListener(`click`, (e) => {
+        e.preventDefault();
+        this._onChangeView();
+        this._container.getElement().replaceChild(this._taskEdit.getElement(), this._taskView.getElement());
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
@@ -44,7 +46,7 @@ export default class TaskController {
     this._taskEdit.getElement().querySelector(`.card__save`)
       .addEventListener(`click`, (e) => {
         e.preventDefault();
-        const formData = new FormData(taskEdit.getElement().querySelector(`.card__form`));
+        const formData = new FormData(this._taskEdit.getElement().querySelector(`.card__form`));
         
         const entry = {
           description: formData.get(`text`),
@@ -82,10 +84,9 @@ export default class TaskController {
     addToArchive.addEventListener(`click`, (e) => {
       e.preventDefault();
       addToArchive.classList.toggle(`card__btn--disabled`);
-      });
-    console.log(`render`)
+    });
+      
     render(this._container.getElement(), this._taskView.getElement(), Position.BEFOREEND);
-    console.log(`render done`)
   }
 
   setDefaultView() {

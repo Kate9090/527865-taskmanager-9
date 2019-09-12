@@ -58,9 +58,7 @@ export default class BoardController {
 
   _renderTask(task) {
     const taskController = new TaskController(this._tasksContainer, task, this._onDataChange, this._onChangeView);
-    
     this._subscriptions.push(taskController.setDefaultView.bind(taskController));
-    console.log(task)
   }
 
   _renderBtnLoadMore() {
