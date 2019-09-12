@@ -18,6 +18,7 @@ export default class BoardController {
     this._tasksContainer = new TasksContainer();
     this._sort = new Sort();
     this._board = new Board();
+    this._btnLoadMore = new BtnLoadMore();
     this._mainContainer = document.querySelector(`.main`);
     this._menuContainer = this._mainContainer.querySelector(`.main__control`);
 
@@ -63,8 +64,12 @@ export default class BoardController {
   }
 
   _renderBtnLoadMore() {
-    const btnLoadMore = new BtnLoadMore();
-    render(this._board.getElement(), btnLoadMore.getElement(), Position.BEFOREEND);
+    
+
+    unrender(this._btnLoadMore.getElement());
+    this._btnLoadMore.removeElement();
+
+    render(this._board.getElement(), this._btnLoadMore.getElement(), Position.BEFOREEND);
   }
 
   _renderBoard(tasks) {
@@ -80,6 +85,7 @@ export default class BoardController {
     this._tasks[taskIndex] = newData;
 
     this._renderBoard(this._tasks);
+    this._renderBtnLoadMore();
 
     // if (this._sortedTasks) {
     //   taskIndex = this._sortedTasks.findIndex((it) => it === oldData);
