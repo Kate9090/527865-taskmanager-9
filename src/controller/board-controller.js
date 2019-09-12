@@ -114,7 +114,7 @@ export default class BoardController {
           const btnLoadMoreContainer = this._mainContainer.querySelector(`.load-more`);
           btnLoadMoreContainer.addEventListener(`click`, onLoadMoreBtnClick);
         }
-      }
+      };
       if (e.target.tagName !== `A`) {
         return;
       }

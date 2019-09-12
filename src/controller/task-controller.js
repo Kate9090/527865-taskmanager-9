@@ -95,7 +95,7 @@ export default class TaskController {
 
     render(this._container.getElement(), this._taskView.getElement(), Position.BEFOREEND);
   }
-  
+
 
   setDefaultView() {
     if (this._container.getElement().contains(this._taskEdit.getElement())) {
