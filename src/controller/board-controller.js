@@ -1,9 +1,8 @@
 import {Menu} from '../components/menu';
 import {Filter} from '../components/filter';
 import {Search} from '../components/search';
-import {Task} from '../components/card';
+import {Board} from '../components/board';
 import {TasksContainer} from '../components/board-tasks';
-import {TaskEdit} from '../components/card-edit';
 import {TaskListEmpty} from '../components/card-list-empty';
 import {Sort} from '../components/sort';
 import {BtnLoadMore} from '../components/load-more';
@@ -18,6 +17,7 @@ export default class BoardController {
     this._tasks = tasks;
     this._tasksContainer = new TasksContainer();
     this._sort = new Sort();
+    this._board = new Board();
     this._mainContainer = document.querySelector(`.main`);
     this._menuContainer = this._mainContainer.querySelector(`.main__control`);
 
@@ -47,8 +47,9 @@ export default class BoardController {
   }
 
   _renderSort() {
-    render(this._mainContainer, this._sort.getElement(), Position.BEFOREEND);
-    render(this._sort.getElement(), this._tasksContainer.getElement(), Position.BEFOREEND);
+    render(this._mainContainer, this._board.getElement(), Position.BEFOREEND);
+    render(this._board.getElement(), this._sort.getElement(), Position.AFTERBEGIN);
+    render(this._board.getElement(), this._tasksContainer.getElement(), Position.AFTERBEGIN);
   }
 
   _renderEmptyTasksList() {
@@ -63,10 +64,14 @@ export default class BoardController {
 
   _renderBtnLoadMore() {
     const btnLoadMore = new BtnLoadMore();
-    render(this._sort.getElement(), btnLoadMore.getElement(), Position.BEFOREEND);
+    render(this._board.getElement(), btnLoadMore.getElement(), Position.BEFOREEND);
   }
 
   _renderBoard(tasks) {
+    unrender(this._tasksContainer.getElement());
+    this._tasksContainer.removeElement();
+
+    render(this._board.getElement(), this._tasksContainer.getElement(), Position.BEFOREEND);
     tasks.forEach((taskMock) => this._renderTask(taskMock));
   }
 
@@ -102,6 +107,12 @@ export default class BoardController {
   }
 
   init(taskMocks, filterMocks) {
+    const TasksCount = {
+      MAX: 20,
+      LOAD: 8,
+      PARTIALLY_CARDS_COUNT: 8
+    };
+
     this._renderHeader();
     this._renderFilter(filterMocks);
     this._renderSort();
@@ -119,54 +130,49 @@ export default class BoardController {
         case `date-up`:
           this._sortedTasks = taskMocks.slice().sort((a, b) => a.dueDate - b.dueDate);
           const sortedByDateUpTasks = this._sortedTasks.slice();
-          this._renderBoard(sortedByDateUpTasks)
+          sortedByDateUpTasks.forEach((task) => this._renderTask(task))
           
           break;
         case `date-down`:
           this._sortedTasks = taskMocks.slice().sort((a, b) => b.dueDate - a.dueDate);
           const sortedByDateDownTasks = this._sortedTasks.slice();
-          this._renderBoard(sortedByDateDownTasks)
+          sortedByDateDownTasks.forEach((task) => this._renderTask(task))
           
           break;
         case `default`:
           this._sortedTasks = null;
           const sortedByDefaultTasks = taskMocks.slice();
-          this._renderBoard(sortedByDefaultTasks);
+          sortedByDefaultTasks.forEach((task) => this._renderTask(task))
           
           break;
       }
     }
 
+    let countForRender = TasksCount.LOAD;
+
     if (this._notCompletedTasksCount(taskMocks, filterMocks)) {
       this._renderEmptyTasksList();
     } else {
-      this._renderBoard(taskMocks);
+      this._renderBoard(taskMocks.slice(0, countForRender));
       
       this._sort.getElement().addEventListener(`click`, (evt) => onSortingByType(evt));
     }
-    this._renderBtnLoadMore();
 
-    const TasksCount = {
-      MAX: 20,
-      LOAD: 8,
-      PARTIALLY_CARDS_COUNT: 8
-    };
-
-    let mountOfTasks = TasksCount.LOAD;
     let newTaskMocks = [];
 
     const onLoadMoreBtnClick = () => {
-      mountOfTasks = mountOfTasks + TasksCount.PARTIALLY_CARDS_COUNT;
-      if (mountOfTasks > TasksCount.MAX) {
-        newTaskMocks = new Array(mountOfTasks - TasksCount.MAX).fill(``).map(createTask);
+      countForRender = countForRender + TasksCount.PARTIALLY_CARDS_COUNT;
+      if (countForRender > TasksCount.MAX) {
+        newTaskMocks = new Array(countForRender - TasksCount.MAX).fill(``).map(createTask);
         removeElement(btnLoadMoreContainer);
       } else {
         newTaskMocks = new Array(TasksCount.PARTIALLY_CARDS_COUNT).fill(``).map(createTask);
       }
       taskMocks = taskMocks.concat(newTaskMocks);
-      this._renderBoard(newTaskMocks);
+      newTaskMocks.forEach((task) => this._renderTask(task))
     };
-
+    
+    this._renderBtnLoadMore();
     const btnLoadMoreContainer = this._mainContainer.querySelector(`.load-more`);
     btnLoadMoreContainer.addEventListener(`click`, onLoadMoreBtnClick);
   }

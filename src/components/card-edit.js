@@ -70,7 +70,7 @@ export class TaskEdit extends AbstractComponent {
                 <button class="card__repeat-toggle" type="button">
                   repeat:<span class="card__repeat-status">yes</span>
                 </button>
-                <fieldset class="card__repeat-days>
+                <fieldset class="card__repeat-days">
                   <div class="card__repeat-days-inner">
                     ${Object.keys(this._repeatingDays).map((day) => (`
                       <input
@@ -83,9 +83,8 @@ export class TaskEdit extends AbstractComponent {
                       />
                       <label class="card__repeat-day" for="repeat-${day}-4"
                         >${day}</label
-                      >`
-                    )
-                    )}
+                      >
+                    `)).join(``)}
                   </div>
                 </fieldset>
               </div>
@@ -118,8 +117,6 @@ export class TaskEdit extends AbstractComponent {
             </div>
             <div class="card__colors-inner">
               <h3 class="card__colors-title">Color</h3>
-              <div class="card__colors-inner">
-              <h3 class="card__colors-title">Color</h3>
               <div class="card__colors-wrap">
                 <input
                   type="radio"
@@ -127,7 +124,6 @@ export class TaskEdit extends AbstractComponent {
                   class="card__color-input card__color-input--black visually-hidden"
                   name="color"
                   value="black"
-                  
                 />
                 <label
                   for="color-black-4"
@@ -141,7 +137,6 @@ export class TaskEdit extends AbstractComponent {
                   class="card__color-input card__color-input--yellow visually-hidden"
                   name="color"
                   value="yellow"
-                  
                 />
                 <label
                   for="color-yellow-4"
@@ -155,7 +150,6 @@ export class TaskEdit extends AbstractComponent {
                   class="card__color-input card__color-input--blue visually-hidden"
                   name="color"
                   value="blue"
-                  
                 />
                 <label
                   for="color-blue-4"
@@ -169,7 +163,6 @@ export class TaskEdit extends AbstractComponent {
                   class="card__color-input card__color-input--green visually-hidden"
                   name="color"
                   value="green"
-                  
                 />
                 <label
                   for="color-green-4"
@@ -183,7 +176,6 @@ export class TaskEdit extends AbstractComponent {
                   class="card__color-input card__color-input--pink visually-hidden"
                   name="color"
                   value="pink"
-                  
                 />
                 <label
                   for="color-pink-4"
