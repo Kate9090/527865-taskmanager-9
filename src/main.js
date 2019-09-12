@@ -1,4 +1,4 @@
-import BoardController from './controller';
+import BoardController from './controller/board-controller';
 import {createTask, createFilter} from './data';
 
 const TasksCount = {
@@ -9,7 +9,7 @@ const TasksCount = {
 const allTasks = [...Array(TasksCount.MAX)].map(() => createTask());
 
 const mainContainer = document.querySelector(`.main`);
-const taskMocks = new Array(TasksCount.LOAD).fill(``).map(createTask);
+const taskMocks = new Array(TasksCount.MAX).fill(``).map(createTask);
 const filterMocks = createFilter(allTasks);
 
 const boardController = new BoardController(mainContainer, taskMocks);

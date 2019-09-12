@@ -24,7 +24,7 @@ export const createTask = () => ({
     'su': false
   },
   tags: [`homework`, `theory`, `practice`, `intensive`, `keks`],
-  colors: [`black`, `yellow`, `blue`, `green`, `pink`],
+  // colors: [`black`, `yellow`, `blue`, `green`, `pink`],
   color: [`black`, `yellow`, `blue`, `green`, `pink`][randomCount(5)],
   startCount: randomCount(3),
   endCount: 1 + randomCount(3),
