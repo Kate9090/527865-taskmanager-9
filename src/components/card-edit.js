@@ -216,6 +216,15 @@ export class TaskEdit extends AbstractComponent {
           </span>`);
 				evt.target.value = ``;
 			}
-		});
+    });
+    
+    this.getElement()
+			.querySelector(`.card__hashtag-list`).addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        console.log(evt.target)
+        if (evt.target.classList.contains(`card__hashtag-delete`) || evt.target.parentNode.contains.class(`card__hashtag-delete`)) {
+          evt.target.closest(`.card__hashtag-inner`).innerHTML = ``
+        }
+      })
 	}
 }
