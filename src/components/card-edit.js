@@ -221,9 +221,40 @@ export class TaskEdit extends AbstractComponent {
     this.getElement()
 			.querySelector(`.card__hashtag-list`).addEventListener(`click`, (evt) => {
         evt.preventDefault();
-        console.log(evt.target)
         if (evt.target.classList.contains(`card__hashtag-delete`) || evt.target.parentNode.contains.class(`card__hashtag-delete`)) {
           evt.target.closest(`.card__hashtag-inner`).innerHTML = ``
+        }
+      })
+
+    let flagDate = true;
+    this.getElement()
+			.querySelector(`.card__date-deadline-toggle`).addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        
+        if (flagDate) {
+          this.getElement().querySelector(`.card__date-deadline`).style.display = `none`;
+          this.getElement().querySelector(`.card__date-status`).innerHTML = `No`
+          flagDate = false;
+        } else {
+          this.getElement().querySelector(`.card__date-deadline`).style.display = `block`;
+          this.getElement().querySelector(`.card__date-status`).innerHTML = `yes`
+          flagDate = true;
+        }
+      });
+
+    let flagRepeat = true;
+    this.getElement()
+      .querySelector(`.card__repeat-toggle`).addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        
+        if (flagRepeat) {
+          this.getElement().querySelector(`.card__repeat-days`).style.display = `none`;
+          this.getElement().querySelector(`.card__repeat-status`).innerHTML = `No`
+          flagRepeat = false;
+        } else {
+          this.getElement().querySelector(`.card__repeat-days`).style.display = `block`;
+          this.getElement().querySelector(`.card__repeat-status`).innerHTML = `yes`
+          flagRepeat = true;
         }
       })
 	}
