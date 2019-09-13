@@ -7,7 +7,7 @@ import {Search} from './components/search';
 import {createTask, createFilter} from './data';
 import {Position, render} from './utils.js';
 
-const TasksCount = {
+export const TasksCount = {
   MAX: 20,
   LOAD: 8,
   PARTIALLY_CARDS_COUNT: 8
@@ -32,6 +32,7 @@ const boardController = new BoardController(mainContainer, taskMocks);
 boardController.init(taskMocks, filterMocks);
 
 render(mainContainer, statistic.getElement(), Position.BEFOREEND);
+statistic.getElement().classList.add(`visually-hidden`);
 
 menu.getElement().addEventListener(`change`, (evt) => {
   evt.preventDefault();
@@ -41,27 +42,21 @@ menu.getElement().addEventListener(`change`, (evt) => {
 
   const tasksId = `control__task`;
   const statisticId = `control__statistic`;
-  // const newTaskId = `control__new-task`;
+  const newTaskId = `control__new-task`;
 
   switch (evt.target.id) {
     case tasksId:
-      console.log(`show`)
       statistic.getElement().classList.add(`visually-hidden`);
       boardController.show();
-
-      // searchController.hide();
       break;
     case statisticId:
-        console.log(`hide`)
       boardController.hide();
-      // searchController.hide();
       statistic.getElement().classList.remove(`visually-hidden`);
       break;
-    // case newTaskId:
-    //   boardController.createTask();
-    //   boardController.show();
-    //   menu.getElement().querySelector(`#${tasksId}`).checked = true;
-    //   break;
+    case newTaskId:
+      boardController.createTask();
+      menu.getElement().querySelector(`#${tasksId}`).checked = true;
+      break;
   }
 });
 

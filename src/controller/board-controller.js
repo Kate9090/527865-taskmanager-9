@@ -1,15 +1,15 @@
-// import {Menu} from '../components/menu';
-// import {Filter} from '../components/filter';
-// import {Search} from '../components/search';
 import {Board} from '../components/board';
 import {TasksContainer} from '../components/board-tasks';
 import {TaskListEmpty} from '../components/card-list-empty';
 import {Sort} from '../components/sort';
 import {BtnLoadMore} from '../components/load-more';
+import {TasksCount} from '../main';
 
-import TaskController from './task-controller';
+import TaskController, {Mode} from './task-controller';
 import {createTask} from '../data';
 import {render, removeElement, Position, unrender} from '../utils';
+
+const TaskControllerMode = Mode;
 
 export default class BoardController {
   constructor(container, tasks) {
@@ -20,11 +20,11 @@ export default class BoardController {
     this._board = new Board();
     this._btnLoadMore = new BtnLoadMore();
     this._mainContainer = document.querySelector(`.main`);
-    // this._menuContainer = this._mainContainer.querySelector(`.main__control`);
-
+    
     this._subscriptions = [];
     this._onDataChange = this._onDataChange.bind(this);
     this._onChangeView = this._onChangeView.bind(this);
+    // this._countOfShownTasks = TasksCount.LOAD;
   }
 
   _notCompletedTasksCount(taskMocks, filterMocks) {
@@ -33,18 +33,6 @@ export default class BoardController {
 
     return taskMocks.length === 0 || countOfAllTasks === countOfArchivedTasks;
   }
-
-  // _renderHeader() {
-  //   const search = new Search();
-
-  //   render(this._menuContainer, this._menu.getElement(), Position.BEFOREEND);
-  //   render(this._mainContainer, search.getElement(), Position.BEFOREEND);
-  // }
-
-  // _renderFilter(filterMock) {
-  //   const filter = new Filter(filterMock);
-  //   render(this._mainContainer, filter.getElement(), Position.BEFOREEND);
-  // }
 
   _renderContainer() {
     render(this._mainContainer, this._board.getElement(), Position.BEFOREEND);
@@ -60,7 +48,7 @@ export default class BoardController {
   }
 
   _renderTask(task) {
-    const taskController = new TaskController(this._tasksContainer, task, this._onDataChange, this._onChangeView);
+    const taskController = new TaskController(this._tasksContainer, task, TaskControllerMode.DEFAULT, this._onDataChange, this._onChangeView);
     this._subscriptions.push(taskController.setDefaultView.bind(taskController));
   }
 
@@ -81,8 +69,13 @@ export default class BoardController {
 
   _onDataChange(newData, oldData) {
     let taskIndex = this._tasks.findIndex((it) => it === oldData);
-    this._tasks[taskIndex] = newData;
-
+    
+    if (newData === null) {
+      this._tasks = [...this._tasks.slice(0, taskIndex), ...this._tasks.slice(taskIndex, this._tasks.length + 1)]
+      // .slice(0, this._countOfShownTasks);
+    } else {
+      this._tasks[taskIndex] = newData;
+    }
     this._renderBoard(this._tasks);
     this._renderBtnLoadMore();
   }
@@ -92,15 +85,8 @@ export default class BoardController {
   }
 
   init(taskMocks, filterMocks) {
-    const TasksCount = {
-      MAX: 20,
-      LOAD: 8,
-      PARTIALLY_CARDS_COUNT: 8
-    };
     let countForRender = TasksCount.LOAD;
 
-    // this._renderHeader();
-    // this._renderFilter(filterMocks);
     this._renderContainer();
     this._renderSort();
 
@@ -176,5 +162,27 @@ export default class BoardController {
 
   hide() {
     this._board.getElement().classList.add(`visually-hidden`);
+  }
+
+  createTask() {
+    const defaultTask = {
+      color: [],
+      description: ``,
+      dueDate: new Date(),
+      endCount: 0,
+      repeatingDays: {
+        'mo': false,
+        'tu': false,
+        'we': false,
+        'th': false,
+        'fr': false,
+        'sa': false,
+        'su': false
+      },
+      startCount: 0,
+      tags: new Set(),
+    }
+
+    const taskController = new TaskController(this._tasksContainer, defaultTask, TaskControllerMode.ADD, this._onDataChange, this._onChangeView);
   }
 }
