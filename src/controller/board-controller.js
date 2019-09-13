@@ -7,6 +7,8 @@ import {TaskListEmpty} from '../components/card-list-empty';
 import {Sort} from '../components/sort';
 import {BtnLoadMore} from '../components/load-more';
 
+import {Statistic} from '../components/statistic';
+
 import TaskController from './task-controller';
 import {createTask} from '../data';
 import {render, removeElement, Position, unrender} from '../utils';
@@ -21,6 +23,8 @@ export default class BoardController {
     this._btnLoadMore = new BtnLoadMore();
     this._mainContainer = document.querySelector(`.main`);
     this._menuContainer = this._mainContainer.querySelector(`.main__control`);
+
+    this._statistic = new Statistic();
 
     this._subscriptions = [];
     this._onDataChange = this._onDataChange.bind(this);
@@ -92,6 +96,10 @@ export default class BoardController {
     this._subscriptions.forEach((it) => it());
   }
 
+  _renderStatistic() {
+    render(this._board.getElement(), this._statistic.getElement(), Position.BEFOREEND);
+  }
+
   init(taskMocks, filterMocks) {
     const TasksCount = {
       MAX: 20,
@@ -159,7 +167,6 @@ export default class BoardController {
       countForRender = countForRender + TasksCount.PARTIALLY_CARDS_COUNT;
       if (countForRender >= TasksCount.MAX) {
         newTaskMocks = new Array(countForRender - TasksCount.MAX).fill(``).map(createTask);
-        // console.log(btnLoadMoreContainer.parentNode)
         removeElement(btnLoadMoreContainer);
       } else {
         newTaskMocks = new Array(TasksCount.PARTIALLY_CARDS_COUNT).fill(``).map(createTask);
@@ -170,5 +177,18 @@ export default class BoardController {
     this._renderBtnLoadMore();
     const btnLoadMoreContainer = this._mainContainer.querySelector(`.load-more`);
     btnLoadMoreContainer.addEventListener(`click`, onLoadMoreBtnClick);
+  
+    let flagStatistic = false;
+    const onToggleShowStatistic = () => {
+      // this._mainContainer.getElement().querySelector(`.control__label`).addEventListener(`click`, )
+      if (flagStatistic) {
+        this._renderStatistic();
+        unrender(this._btnLoadMore.getElement());
+      } else {
+        this._btnLoadMore.removeElement();
+      }
+    }
+    this._mainContainer.querySelector(`.control__label`).addEventListener(`click`, onToggleShowStatistic)
+    
   }
 }
