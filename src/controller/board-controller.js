@@ -1,13 +1,11 @@
-import {Menu} from '../components/menu';
-import {Filter} from '../components/filter';
-import {Search} from '../components/search';
+// import {Menu} from '../components/menu';
+// import {Filter} from '../components/filter';
+// import {Search} from '../components/search';
 import {Board} from '../components/board';
 import {TasksContainer} from '../components/board-tasks';
 import {TaskListEmpty} from '../components/card-list-empty';
 import {Sort} from '../components/sort';
 import {BtnLoadMore} from '../components/load-more';
-
-import {Statistic} from '../components/statistic';
 
 import TaskController from './task-controller';
 import {createTask} from '../data';
@@ -22,9 +20,7 @@ export default class BoardController {
     this._board = new Board();
     this._btnLoadMore = new BtnLoadMore();
     this._mainContainer = document.querySelector(`.main`);
-    this._menuContainer = this._mainContainer.querySelector(`.main__control`);
-
-    this._statistic = new Statistic();
+    // this._menuContainer = this._mainContainer.querySelector(`.main__control`);
 
     this._subscriptions = [];
     this._onDataChange = this._onDataChange.bind(this);
@@ -38,18 +34,17 @@ export default class BoardController {
     return taskMocks.length === 0 || countOfAllTasks === countOfArchivedTasks;
   }
 
-  _renderHeader() {
-    const menu = new Menu();
-    const search = new Search();
+  // _renderHeader() {
+  //   const search = new Search();
 
-    render(this._menuContainer, menu.getElement(), Position.BEFOREEND);
-    render(this._mainContainer, search.getElement(), Position.BEFOREEND);
-  }
+  //   render(this._menuContainer, this._menu.getElement(), Position.BEFOREEND);
+  //   render(this._mainContainer, search.getElement(), Position.BEFOREEND);
+  // }
 
-  _renderFilter(filterMock) {
-    const filter = new Filter(filterMock);
-    render(this._mainContainer, filter.getElement(), Position.BEFOREEND);
-  }
+  // _renderFilter(filterMock) {
+  //   const filter = new Filter(filterMock);
+  //   render(this._mainContainer, filter.getElement(), Position.BEFOREEND);
+  // }
 
   _renderContainer() {
     render(this._mainContainer, this._board.getElement(), Position.BEFOREEND);
@@ -96,10 +91,6 @@ export default class BoardController {
     this._subscriptions.forEach((it) => it());
   }
 
-  _renderStatistic() {
-    render(this._board.getElement(), this._statistic.getElement(), Position.BEFOREEND);
-  }
-
   init(taskMocks, filterMocks) {
     const TasksCount = {
       MAX: 20,
@@ -108,8 +99,8 @@ export default class BoardController {
     };
     let countForRender = TasksCount.LOAD;
 
-    this._renderHeader();
-    this._renderFilter(filterMocks);
+    // this._renderHeader();
+    // this._renderFilter(filterMocks);
     this._renderContainer();
     this._renderSort();
 
@@ -177,18 +168,13 @@ export default class BoardController {
     this._renderBtnLoadMore();
     const btnLoadMoreContainer = this._mainContainer.querySelector(`.load-more`);
     btnLoadMoreContainer.addEventListener(`click`, onLoadMoreBtnClick);
-  
-    let flagStatistic = false;
-    const onToggleShowStatistic = () => {
-      // this._mainContainer.getElement().querySelector(`.control__label`).addEventListener(`click`, )
-      if (flagStatistic) {
-        this._renderStatistic();
-        unrender(this._btnLoadMore.getElement());
-      } else {
-        this._btnLoadMore.removeElement();
-      }
-    }
-    this._mainContainer.querySelector(`.control__label`).addEventListener(`click`, onToggleShowStatistic)
-    
+  }
+
+  show() {
+    this._board.getElement().classList.remove(`visually-hidden`);
+  }
+
+  hide() {
+    this._board.getElement().classList.add(`visually-hidden`);
   }
 }
