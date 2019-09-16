@@ -23,7 +23,7 @@ export const createTask = () => ({
     'sa': false,
     'su': false
   },
-  tags: [`homework`, `theory`, `practice`, `intensive`, `keks`],
+  tags: new Set([`homework`, `theory`, `practice`, `intensive`, `keks`]),
   // colors: [`black`, `yellow`, `blue`, `green`, `pink`],
   color: [`black`, `yellow`, `blue`, `green`, `pink`][randomCount(5)],
   startCount: randomCount(3),

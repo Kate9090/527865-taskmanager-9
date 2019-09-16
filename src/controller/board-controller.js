@@ -24,7 +24,7 @@ export default class BoardController {
     this._subscriptions = [];
     this._onDataChange = this._onDataChange.bind(this);
     this._onChangeView = this._onChangeView.bind(this);
-    // this._countOfShownTasks = TasksCount.LOAD;
+    this._countOfShownTasks = 0;
   }
 
   _notCompletedTasksCount(taskMocks, filterMocks) {
@@ -64,15 +64,16 @@ export default class BoardController {
     this._tasksContainer.removeElement();
 
     render(this._board.getElement(), this._tasksContainer.getElement(), Position.BEFOREEND);
-    tasks.forEach((taskMock) => this._renderTask(taskMock));
+    this._renderBtnLoadMore();
+    tasks.slice(0, this._countOfShownTasks).forEach((taskMock) => this._renderTask(taskMock));
   }
 
   _onDataChange(newData, oldData) {
+    console.log(`1` + this._tasks)
     let taskIndex = this._tasks.findIndex((it) => it === oldData);
     
     if (newData === null) {
-      this._tasks = [...this._tasks.slice(0, taskIndex), ...this._tasks.slice(taskIndex, this._tasks.length + 1)]
-      // .slice(0, this._countOfShownTasks);
+      this._tasks = [...this._tasks.slice(0, taskIndex), ...this._tasks.slice(taskIndex, this._tasks.length + 1)].slice(0, this._countOfShownTasks);
     } else {
       this._tasks[taskIndex] = newData;
     }
@@ -84,76 +85,60 @@ export default class BoardController {
     this._subscriptions.forEach((it) => it());
   }
 
-  init(taskMocks, filterMocks) {
-    let countForRender = TasksCount.LOAD;
+  _onLoadMoreBtnClick() {
+    console.log(`1`)
+    this._countOfShownTasks = this._countOfShownTasks + TasksCount.PARTIALLY_CARDS_COUNT;
+    if (this._countOfShownTasks >= TasksCount.MAX) {
+      unrender(this._btnLoadMore.getElement());
+      this._btnLoadMore.removeElement();
+    } 
+    console.log(this._countOfShownTasks)
+    this._tasks.slice(0, this._countOfShownTasks).forEach((task) => this._renderTask(task));
+  };
 
+  _onSortingByType(e) {
+    e.preventDefault();
+
+    if (e.target.tagName !== `A`) {
+      return;
+    }
+
+    this._tasksContainer.getElement().innerHTML = ``;
+
+    switch (e.target.dataset.sortType) {
+      case `date-up`:
+        this._sortedTasks = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
+        const sortedByDateUpTasks = this._sortedTasks;
+
+        this._renderBoard(sortedByDateUpTasks);
+        break;
+      case `date-down`:
+        this._sortedTasks = this._tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
+        const sortedByDateDownTasks = this._sortedTasks;
+
+        this._renderBoard(sortedByDateDownTasks);
+        break;
+      case `default`:
+        this._sortedTasks = null;
+        const sortedByDefaultTasks = this._tasks;
+
+        this._renderBoard(sortedByDefaultTasks);
+        break;
+    }
+  };
+
+  init(taskMocks, filterMocks) {
     this._renderContainer();
     this._renderSort();
-
-    const onSortingByType = (e) => {
-      e.preventDefault();
-
-      const onRerenderBtnLoadMore = () => {
-        if (countForRender < TasksCount.MAX) {
-          this._renderBtnLoadMore();
-          const btnLoadMoreContainer = this._mainContainer.querySelector(`.load-more`);
-          btnLoadMoreContainer.addEventListener(`click`, onLoadMoreBtnClick);
-        }
-      };
-      if (e.target.tagName !== `A`) {
-        return;
-      }
-
-      this._tasksContainer.getElement().innerHTML = ``;
-
-      switch (e.target.dataset.sortType) {
-        case `date-up`:
-          this._sortedTasks = taskMocks.slice().sort((a, b) => a.dueDate - b.dueDate);
-          const sortedByDateUpTasks = this._sortedTasks.slice(0, countForRender);
-
-          this._renderBoard(sortedByDateUpTasks);
-          onRerenderBtnLoadMore();
-          break;
-        case `date-down`:
-          this._sortedTasks = taskMocks.slice().sort((a, b) => b.dueDate - a.dueDate);
-          const sortedByDateDownTasks = this._sortedTasks.slice(0, countForRender);
-
-          this._renderBoard(sortedByDateDownTasks);
-          onRerenderBtnLoadMore();
-          break;
-        case `default`:
-          this._sortedTasks = null;
-          const sortedByDefaultTasks = taskMocks.slice(0, countForRender);
-
-          this._renderBoard(sortedByDefaultTasks);
-          onRerenderBtnLoadMore();
-          break;
-      }
-    };
 
     if (this._notCompletedTasksCount(taskMocks, filterMocks)) {
       this._renderEmptyTasksList();
     } else {
-      this._renderBoard(taskMocks.slice(0, countForRender));
-      this._sort.getElement().addEventListener(`click`, (evt) => onSortingByType(evt));
+      this._renderBoard(taskMocks);
+      this._sort.getElement().addEventListener(`click`, (evt) => this._onSortingByType(evt));
     }
 
-    let newTaskMocks = [];
-
-    const onLoadMoreBtnClick = () => {
-      countForRender = countForRender + TasksCount.PARTIALLY_CARDS_COUNT;
-      if (countForRender >= TasksCount.MAX) {
-        newTaskMocks = new Array(countForRender - TasksCount.MAX).fill(``).map(createTask);
-        removeElement(btnLoadMoreContainer);
-      } else {
-        newTaskMocks = new Array(TasksCount.PARTIALLY_CARDS_COUNT).fill(``).map(createTask);
-      }
-      newTaskMocks.forEach((task) => this._renderTask(task));
-    };
-
-    this._renderBtnLoadMore();
-    const btnLoadMoreContainer = this._mainContainer.querySelector(`.load-more`);
-    btnLoadMoreContainer.addEventListener(`click`, onLoadMoreBtnClick);
+    this._btnLoadMore.getElement().addEventListener(`click`, this._onLoadMoreBtnClick());
   }
 
   show() {
