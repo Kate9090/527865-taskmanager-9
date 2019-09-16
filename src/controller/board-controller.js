@@ -6,8 +6,7 @@ import {BtnLoadMore} from '../components/load-more';
 import {TasksCount} from '../main';
 
 import TaskController, {Mode} from './task-controller';
-import {createTask} from '../data';
-import {render, removeElement, Position, unrender} from '../utils';
+import {render, Position, unrender} from '../utils';
 
 const TaskControllerMode = Mode;
 

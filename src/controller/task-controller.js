@@ -37,11 +37,16 @@ export default class TaskController {
       currentView = this._taskEdit;
       position = Position.AFTERBEGIN;
     }
-    render(this._container.getElement(), currentView.getElement(), position);
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
-        this._container.getElement().replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
+        if (mode === Mode.DEFAULT) {
+          if (this._container.getElement().contains(this._taskEdit.getElement())) {
+            this._container.getElement().replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
+          }
+        } else if (mode === Mode.ADDING) {
+          this._container.getElement().removeChild(currentView.getElement());
+        }
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
@@ -90,7 +95,7 @@ export default class TaskController {
           isArchive: addToArchive.classList.contains(`card__btn--disabled`) ? true : false,
         };
 
-        this._onDataChange(entry, this._data);
+        this._onDataChange(entry, mode === Mode.DEFAULT ? this._data : null);
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
@@ -112,6 +117,7 @@ export default class TaskController {
       addToArchive.classList.toggle(`card__btn--disabled`);
     });
 
+    render(this._container.getElement(), currentView.getElement(), position);
   }
 
 

@@ -60,7 +60,7 @@ export default class TaskListController {
     this._creatingTask = new TaskController(
       this._container,
       defaultTask,
-      TaskControllerMode.ADDING,
+      TaskControllerMode.ADD,
       (...args) => {
         this._creatingTask = null;
         this._onDataChange(...args);
@@ -86,8 +86,12 @@ export default class TaskListController {
     } else {
       this._tasks[taskIndex] = newData;
     }
-    this._renderBoard(this._tasks);
-    this._renderBtnLoadMore();
+    // this._renderBoard(this._tasks);
+    // this._renderBtnLoadMore();
+
+    this.setTasks(this._tasks);
+
+    this._onDataChangeMain(this._tasks);
   }
 
   _onChangeView() {

@@ -5,9 +5,7 @@ export class Task extends AbstractComponent {
     color,
     description,
     dueDate,
-    endCount,
     repeatingDays,
-    startCount,
     tags,
   }) {
     super();
@@ -16,8 +14,6 @@ export class Task extends AbstractComponent {
     this._repeatingDays = repeatingDays;
     this._tags = tags;
     this._color = color;
-    this._startCount = startCount;
-    this._endCount = endCount;
   }
 
   getTemplate() {

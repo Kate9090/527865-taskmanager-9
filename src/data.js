@@ -26,7 +26,6 @@ export const createTask = () => ({
     'su': false
   },
   tags: new Set([`homework`, `theory`, `practice`, `intensive`, `keks`].slice(startCount, endCount)),
-  // colors: [`black`, `yellow`, `blue`, `green`, `pink`],
   color: [`black`, `yellow`, `blue`, `green`, `pink`][randomCount(5)],
   isFavorites: randomBoolean(),
   isArchive: randomBoolean(),
