@@ -57,7 +57,7 @@ export class Task extends AbstractComponent {
               </div>
               <div class="card__hashtag">
                 <div class="card__hashtag-list">
-                  ${Array.from(this._tags).slice(this._startCount, this._startCount + this._endCount).map((tag) => `<span class="card__hashtag-inner">
+                  ${Array.from(this._tags).map((tag) => `<span class="card__hashtag-inner">
                       <span class="card__hashtag-name">#${tag}</span></span>`).join(``)}
                 </div>
               </div>

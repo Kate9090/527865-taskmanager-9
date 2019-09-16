@@ -6,6 +6,8 @@ const randomSign = () => {
   }
   return -1;
 };
+const startCount = randomCount(3);
+const endCount = startCount + 1 + randomCount(3);
 
 export const createTask = () => ({
   description: [
@@ -23,11 +25,9 @@ export const createTask = () => ({
     'sa': false,
     'su': false
   },
-  tags: new Set([`homework`, `theory`, `practice`, `intensive`, `keks`]),
+  tags: new Set([`homework`, `theory`, `practice`, `intensive`, `keks`].slice(startCount, endCount)),
   // colors: [`black`, `yellow`, `blue`, `green`, `pink`],
   color: [`black`, `yellow`, `blue`, `green`, `pink`][randomCount(5)],
-  startCount: randomCount(3),
-  endCount: 1 + randomCount(3),
   isFavorites: randomBoolean(),
   isArchive: randomBoolean(),
   isOverdue() {
