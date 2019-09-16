@@ -24,6 +24,8 @@ export default class BoardController {
     this._subscriptions = [];
     this._onDataChange = this._onDataChange.bind(this);
     this._onChangeView = this._onChangeView.bind(this);
+    this._onLoadMoreBtnClick = this._onLoadMoreBtnClick.bind(this);
+    this._onSortingByType = this._onSortingByType.bind(this);
     this._countOfShownTasks = 0;
   }
 
@@ -64,12 +66,14 @@ export default class BoardController {
     this._tasksContainer.removeElement();
 
     render(this._board.getElement(), this._tasksContainer.getElement(), Position.BEFOREEND);
+    
     this._renderBtnLoadMore();
-    tasks.slice(0, this._countOfShownTasks).forEach((taskMock) => this._renderTask(taskMock));
+    this._btnLoadMore.getElement().addEventListener(`click`, this._onLoadMoreBtnClick);
+
+    tasks.slice(0, this._countOfShownTasks).forEach((taskMock) => this._renderTask(taskMock))
   }
 
   _onDataChange(newData, oldData) {
-    console.log(`1` + this._tasks)
     let taskIndex = this._tasks.findIndex((it) => it === oldData);
     
     if (newData === null) {
@@ -86,13 +90,11 @@ export default class BoardController {
   }
 
   _onLoadMoreBtnClick() {
-    console.log(`1`)
     this._countOfShownTasks = this._countOfShownTasks + TasksCount.PARTIALLY_CARDS_COUNT;
     if (this._countOfShownTasks >= TasksCount.MAX) {
       unrender(this._btnLoadMore.getElement());
       this._btnLoadMore.removeElement();
-    } 
-    console.log(this._countOfShownTasks)
+    }
     this._tasks.slice(0, this._countOfShownTasks).forEach((task) => this._renderTask(task));
   };
 
@@ -130,15 +132,16 @@ export default class BoardController {
   init(taskMocks, filterMocks) {
     this._renderContainer();
     this._renderSort();
+    this._renderBtnLoadMore();
 
     if (this._notCompletedTasksCount(taskMocks, filterMocks)) {
       this._renderEmptyTasksList();
     } else {
       this._renderBoard(taskMocks);
-      this._sort.getElement().addEventListener(`click`, (evt) => this._onSortingByType(evt));
     }
 
-    this._btnLoadMore.getElement().addEventListener(`click`, this._onLoadMoreBtnClick());
+    this._sort.getElement().addEventListener(`click`, (evt) => this._onSortingByType(evt));
+    this._btnLoadMore.getElement().addEventListener(`click`, this._onLoadMoreBtnClick);
   }
 
   show() {
