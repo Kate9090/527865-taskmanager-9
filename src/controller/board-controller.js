@@ -26,7 +26,7 @@ export default class BoardController {
     this._onChangeView = this._onChangeView.bind(this);
     this._onLoadMoreBtnClick = this._onLoadMoreBtnClick.bind(this);
     this._onSortingByType = this._onSortingByType.bind(this);
-    this._countOfShownTasks = 0;
+    this._countOfShownTasks = TasksCount.LOAD;
   }
 
   _notCompletedTasksCount(taskMocks, filterMocks) {
@@ -55,10 +55,9 @@ export default class BoardController {
   }
 
   _renderBtnLoadMore() {
-    unrender(this._btnLoadMore.getElement());
-    this._btnLoadMore.removeElement();
-
-    render(this._board.getElement(), this._btnLoadMore.getElement(), Position.BEFOREEND);
+    if (this._countOfShownTasks <= TasksCount.MAX) {
+      render(this._board.getElement(), this._btnLoadMore.getElement(), Position.BEFOREEND);
+    }
   }
 
   _renderBoard(tasks) {
@@ -69,8 +68,7 @@ export default class BoardController {
     
     this._renderBtnLoadMore();
     this._btnLoadMore.getElement().addEventListener(`click`, this._onLoadMoreBtnClick);
-
-    tasks.slice(0, this._countOfShownTasks).forEach((taskMock) => this._renderTask(taskMock))
+    tasks.slice(0, this._countOfShownTasks).forEach((taskMock) => this._renderTask(taskMock));
   }
 
   _onDataChange(newData, oldData) {
@@ -82,6 +80,7 @@ export default class BoardController {
       this._tasks[taskIndex] = newData;
     }
     this._renderBoard(this._tasks);
+    
     this._renderBtnLoadMore();
   }
 
@@ -94,8 +93,9 @@ export default class BoardController {
     if (this._countOfShownTasks >= TasksCount.MAX) {
       unrender(this._btnLoadMore.getElement());
       this._btnLoadMore.removeElement();
+      TasksCount.PARTIALLY_CARDS_COUNT = this._countOfShownTasks - TasksCount.MAX;
     }
-    this._tasks.slice(0, this._countOfShownTasks).forEach((task) => this._renderTask(task));
+    this._tasks.slice(0, TasksCount.PARTIALLY_CARDS_COUNT).forEach((task) => this._renderTask(task));
   };
 
   _onSortingByType(e) {
