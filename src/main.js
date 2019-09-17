@@ -1,4 +1,6 @@
 import BoardController from './controller/board-controller';
+import SearchController from './controller/search-controller';
+
 import {Statistic} from './components/statistic';
 import {Menu} from './components/menu';
 import {Filter} from './components/filter';
@@ -20,6 +22,10 @@ const filterMocks = createFilter(allTasks);
 const statistic = new Statistic();
 const menuContainer = mainContainer.querySelector(`.main__control`);
 
+const onDataChange = (tasks) => {
+  taskMocks = tasks;
+};
+
 const menu = new Menu();
 const search = new Search();
 const filter = new Filter(filterMocks);
@@ -28,11 +34,20 @@ render(menuContainer, menu.getElement(), Position.BEFOREEND);
 render(mainContainer, search.getElement(), Position.BEFOREEND);
 render(mainContainer, filter.getElement(), Position.BEFOREEND);
 
-const taskListController = new BoardController(mainContainer, filterMocks);
+const taskListController = new BoardController(mainContainer, onDataChange, filterMocks);
 taskListController.show(taskMocks);
 
 render(mainContainer, statistic.getElement(), Position.BEFOREEND);
 statistic.getElement().classList.add(`visually-hidden`);
+
+const onSearchBackButtonClick = () => {
+  statistic.getElement().classList.add(`visually-hidden`);
+  searchController.hide();
+  taskListController.show(taskMocks);
+};
+const searchController = new SearchController(mainContainer, search, onSearchBackButtonClick);
+
+
 
 menu.getElement().addEventListener(`change`, (evt) => {
   evt.preventDefault();

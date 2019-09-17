@@ -9,8 +9,9 @@ import TaskListController from './task-list-controller';
 import {render, Position, unrender} from '../utils';
 
 export default class BoardController {
-  constructor(container, filterMocks) {
+  constructor(container, onDataChange, filterMocks) {
     this._container = container;
+    this._onDataChangeMain = onDataChange;
     this._tasks = [];
     this._filterMock = filterMocks;
     this._tasksContainer = new TasksContainer();
@@ -65,6 +66,8 @@ export default class BoardController {
 
   _onDataChange(tasks) {
     this._tasks = tasks;
+
+    this._onDataChangeMain(this._tasks);
     this._renderBoard(this._tasks);
     this._renderBtnLoadMore();
   }
