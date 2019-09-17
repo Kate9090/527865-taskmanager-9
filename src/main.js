@@ -47,7 +47,11 @@ const onSearchBackButtonClick = () => {
 };
 const searchController = new SearchController(mainContainer, search, onSearchBackButtonClick);
 
-
+search.getElement().addEventListener(`click`, () => {
+  statistic.getElement().classList.add(`visually-hidden`);
+  taskListController.hide();
+  searchController.show(taskMocks);
+});
 
 menu.getElement().addEventListener(`change`, (evt) => {
   evt.preventDefault();

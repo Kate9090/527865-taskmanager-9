@@ -3,7 +3,7 @@ import {SearchResultInfo} from '../components/search-result-info';
 import {SearchResultGroup} from '../components/search-result-group';
 import TaskListController from './task-list-controller';
 
-import {render, Position} from '../utils.js';
+import {render, unrender, Position} from '../utils.js';
 
 export default class SearchController {
   constructor(container, search, onBackButtonClick) {
