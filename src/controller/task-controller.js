@@ -10,7 +10,7 @@ import {render, Position} from '../utils';
 export const Mode = {
   ADD: `add`,
   DEFAULT: `default`
-}
+};
 
 export default class TaskController {
   constructor(container, data, mode, onDataChange, onChangeView) {
@@ -31,7 +31,7 @@ export default class TaskController {
       defaultDate: this._data.dueDate,
     });
     let currentView = this._taskView;
-    let position = Position.BEFOREEND
+    let position = Position.BEFOREEND;
 
     if (mode === Mode.ADD) {
       currentView = this._taskEdit;

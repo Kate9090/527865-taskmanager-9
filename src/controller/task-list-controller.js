@@ -46,17 +46,17 @@ export default class TaskListController {
       },
       startCount: 0,
       tags: new Set(),
-    }
+    };
 
     this._creatingTask = new TaskController(
-      this._container,
-      defaultTask,
-      TaskControllerMode.ADD,
-      (...args) => {
-        this._creatingTask = null;
-        this._onDataChange(...args);
-      },
-      this._onChangeView
+        this._container,
+        defaultTask,
+        TaskControllerMode.ADD,
+        (...args) => {
+          this._creatingTask = null;
+          this._onDataChange(...args);
+        },
+        this._onChangeView
     );
   }
 
@@ -67,7 +67,7 @@ export default class TaskListController {
 
   _onDataChange(newData, oldData) {
     let taskIndex = this._tasks.findIndex((it) => it === oldData);
-    
+
     if (newData === null) {
       this._tasks = [...this._tasks.slice(0, taskIndex), ...this._tasks.slice(taskIndex, this._tasks.length + 1)];
     } else if (oldData === null) {

@@ -81,7 +81,7 @@ export default class BoardController {
       TasksCount.PARTIALLY_CARDS_COUNT = this._countOfShownTasks - TasksCount.MAX;
     }
     this._taskListController.addTasks(this._tasks.slice(0, TasksCount.PARTIALLY_CARDS_COUNT));
-  };
+  }
 
   _onSortingByType(e) {
     e.preventDefault();
@@ -109,7 +109,7 @@ export default class BoardController {
         this._taskListController.setTasks(sortedByDefaultTasks);
         break;
     }
-  };
+  }
 
   _init() {
     this._renderContainer();

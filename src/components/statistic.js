@@ -2,7 +2,7 @@ import {AbstractComponent} from './abstract-component';
 
 export class Statistic extends AbstractComponent {
   constructor() {
-  super();
+    super();
   }
 
   getTemplate() {
