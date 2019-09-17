@@ -64,6 +64,7 @@ export default class StatisticsController {
     const colorsCtx = this._statistics.getElement().querySelector(`.statistic__colors`);
 
     const taskColors = this._tasks.map((task) => task.color);
+
     const byColorTasks = taskColors.reduce((acc, currentValue) => {
       const index = acc.findIndex(({color}) => color === currentValue);
       if (index !== -1) {

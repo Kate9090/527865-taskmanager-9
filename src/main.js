@@ -8,18 +8,16 @@ import {Search} from './components/search';
 
 import {createTask, createFilter} from './data';
 import {Position, render} from './utils.js';
-import { ENETDOWN } from 'constants';
 
 export const TasksCount = {
   MAX: 20,
   LOAD: 8,
   PARTIALLY_CARDS_COUNT: 8
 };
-const allTasks = [...Array(TasksCount.MAX)].map(() => createTask());
 
 const mainContainer = document.querySelector(`.main`);
 let taskMocks = new Array(TasksCount.MAX).fill(``).map(createTask);
-const filterMocks = createFilter(allTasks);
+const filterMocks = createFilter(taskMocks);
 const menuContainer = mainContainer.querySelector(`.main__control`);
 
 const onDataChange = (tasks) => {
