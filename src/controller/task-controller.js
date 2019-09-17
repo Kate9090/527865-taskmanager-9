@@ -38,14 +38,16 @@ export default class TaskController {
       position = Position.AFTERBEGIN;
     }
 
+    render(this._container, currentView.getElement(), position);
+
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
         if (mode === Mode.DEFAULT) {
-          if (this._container.getElement().contains(this._taskEdit.getElement())) {
-            this._container.getElement().replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
+          if (this._container.contains(this._taskEdit.getElement())) {
+            this._container.replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
           }
         } else if (mode === Mode.ADDING) {
-          this._container.getElement().removeChild(currentView.getElement());
+          this._container.removeChild(currentView.getElement());
         }
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
@@ -55,7 +57,7 @@ export default class TaskController {
       .addEventListener(`click`, (e) => {
         e.preventDefault();
         this._onChangeView();
-        this._container.getElement().replaceChild(this._taskEdit.getElement(), this._taskView.getElement());
+        this._container.replaceChild(this._taskEdit.getElement(), this._taskView.getElement());
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
@@ -116,14 +118,11 @@ export default class TaskController {
       e.preventDefault();
       addToArchive.classList.toggle(`card__btn--disabled`);
     });
-
-    render(this._container.getElement(), currentView.getElement(), position);
   }
 
-
   setDefaultView() {
-    if (this._container.getElement().contains(this._taskEdit.getElement())) {
-      this._container.getElement().replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
+    if (this._container.contains(this._taskEdit.getElement())) {
+      this._container.replaceChild(this._taskView.getElement(), this._taskEdit.getElement());
     }
   }
 }

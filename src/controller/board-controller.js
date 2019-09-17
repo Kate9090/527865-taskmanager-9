@@ -5,34 +5,35 @@ import {Sort} from '../components/sort';
 import {BtnLoadMore} from '../components/load-more';
 import {TasksCount} from '../main';
 
-import TaskController, {Mode} from './task-controller';
+import TaskListController from './task-list-controller';
 import {render, Position, unrender} from '../utils';
 
-const TaskControllerMode = Mode;
-
 export default class BoardController {
-  constructor(container, tasks) {
+  constructor(container, filterMocks) {
     this._container = container;
-    this._tasks = tasks;
+    this._tasks = [];
+    this._filterMock = filterMocks;
     this._tasksContainer = new TasksContainer();
     this._sort = new Sort();
     this._board = new Board();
     this._btnLoadMore = new BtnLoadMore();
     this._mainContainer = document.querySelector(`.main`);
-    
+
     this._subscriptions = [];
     this._onDataChange = this._onDataChange.bind(this);
     this._onChangeView = this._onChangeView.bind(this);
     this._onLoadMoreBtnClick = this._onLoadMoreBtnClick.bind(this);
     this._onSortingByType = this._onSortingByType.bind(this);
     this._countOfShownTasks = TasksCount.LOAD;
+    this._taskListController = new TaskListController(this._tasksContainer.getElement(), this._onDataChange.bind(this));
+    this._init();
   }
 
-  _notCompletedTasksCount(taskMocks, filterMocks) {
-    const countOfArchivedTasks = filterMocks.find((item) => item.title === `Archive`).getValue();
-    const countOfAllTasks = filterMocks.find((item) => item.title === `All`).getValue();
+  _notCompletedTasksCount(tasks) {
+    const countOfArchivedTasks = this._filterMock.find((item) => item.title === `Archive`).getValue();
+    const countOfAllTasks = this._filterMock.find((item) => item.title === `All`).getValue();
 
-    return taskMocks.length === 0 || countOfAllTasks === countOfArchivedTasks;
+    return tasks.length === 0 || countOfAllTasks === countOfArchivedTasks;
   }
 
   _renderContainer() {
@@ -48,11 +49,6 @@ export default class BoardController {
     render(this._tasksContainer.getElement(), taskListEmpty.getElement(), Position.AFTERBEGIN);
   }
 
-  _renderTask(task) {
-    const taskController = new TaskController(this._tasksContainer, task, TaskControllerMode.DEFAULT, this._onDataChange, this._onChangeView);
-    this._subscriptions.push(taskController.setDefaultView.bind(taskController));
-  }
-
   _renderBtnLoadMore() {
     if (this._countOfShownTasks <= TasksCount.MAX) {
       render(this._board.getElement(), this._btnLoadMore.getElement(), Position.BEFOREEND);
@@ -60,26 +56,16 @@ export default class BoardController {
   }
 
   _renderBoard(tasks) {
-    unrender(this._tasksContainer.getElement());
-    this._tasksContainer.removeElement();
-
     render(this._board.getElement(), this._tasksContainer.getElement(), Position.BEFOREEND);
-    
+
     this._renderBtnLoadMore();
     this._btnLoadMore.getElement().addEventListener(`click`, this._onLoadMoreBtnClick);
-    tasks.slice(0, this._countOfShownTasks).forEach((taskMock) => this._renderTask(taskMock));
+    this._taskListController.setTasks(tasks.slice(0, this._countOfShownTasks));
   }
 
-  _onDataChange(newData, oldData) {
-    let taskIndex = this._tasks.findIndex((it) => it === oldData);
-    
-    if (newData === null) {
-      this._tasks = [...this._tasks.slice(0, taskIndex), ...this._tasks.slice(taskIndex, this._tasks.length + 1)].slice(0, this._countOfShownTasks);
-    } else {
-      this._tasks[taskIndex] = newData;
-    }
+  _onDataChange(tasks) {
+    this._tasks = tasks;
     this._renderBoard(this._tasks);
-    
     this._renderBtnLoadMore();
   }
 
@@ -94,7 +80,7 @@ export default class BoardController {
       this._btnLoadMore.removeElement();
       TasksCount.PARTIALLY_CARDS_COUNT = this._countOfShownTasks - TasksCount.MAX;
     }
-    this._tasks.slice(0, TasksCount.PARTIALLY_CARDS_COUNT).forEach((task) => this._renderTask(task));
+    this._taskListController.addTasks(this._tasks.slice(0, TasksCount.PARTIALLY_CARDS_COUNT));
   };
 
   _onSortingByType(e) {
@@ -110,40 +96,33 @@ export default class BoardController {
       case `date-up`:
         this._sortedTasks = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
         const sortedByDateUpTasks = this._sortedTasks;
-
-        this._renderBoard(sortedByDateUpTasks);
+        this._taskListController.setTasks(sortedByDateUpTasks);
         break;
       case `date-down`:
         this._sortedTasks = this._tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
         const sortedByDateDownTasks = this._sortedTasks;
-
-        this._renderBoard(sortedByDateDownTasks);
+        this._taskListController.setTasks(sortedByDateDownTasks);
         break;
       case `default`:
         this._sortedTasks = null;
         const sortedByDefaultTasks = this._tasks;
-
-        this._renderBoard(sortedByDefaultTasks);
+        this._taskListController.setTasks(sortedByDefaultTasks);
         break;
     }
   };
 
-  init(taskMocks, filterMocks) {
+  _init() {
     this._renderContainer();
     this._renderSort();
     this._renderBtnLoadMore();
 
-    if (this._notCompletedTasksCount(taskMocks, filterMocks)) {
-      this._renderEmptyTasksList();
-    } else {
-      this._renderBoard(taskMocks);
-    }
-
     this._sort.getElement().addEventListener(`click`, (evt) => this._onSortingByType(evt));
-    this._btnLoadMore.getElement().addEventListener(`click`, this._onLoadMoreBtnClick);
   }
 
-  show() {
+  show(tasks) {
+    if (tasks !== this._tasks) {
+      this._setTasks(tasks);
+    }
     this._board.getElement().classList.remove(`visually-hidden`);
   }
 
@@ -152,24 +131,17 @@ export default class BoardController {
   }
 
   createTask() {
-    const defaultTask = {
-      color: [],
-      description: ``,
-      dueDate: new Date(),
-      endCount: 0,
-      repeatingDays: {
-        'mo': false,
-        'tu': false,
-        'we': false,
-        'th': false,
-        'fr': false,
-        'sa': false,
-        'su': false
-      },
-      startCount: 0,
-      tags: new Set(),
-    }
+    this._taskListController.createTask();
+  }
 
-    const taskController = new TaskController(this._tasksContainer, defaultTask, TaskControllerMode.ADD, this._onDataChange, this._onChangeView);
+  _setTasks(tasks) {
+    this._tasks = tasks;
+    this._countOfShownTasks = TasksCount.LOAD;
+
+    if (this._notCompletedTasksCount(this._tasks)) {
+      this._renderEmptyTasksList();
+    } else {
+      this._renderBoard(this._tasks);
+    }
   }
 }

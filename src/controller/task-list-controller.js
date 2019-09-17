@@ -1,16 +1,4 @@
-// import {Board} from '../components/board';
-// import {TasksContainer} from '../components/board-tasks';
-// import {TaskListEmpty} from '../components/card-list-empty';
-// import {Sort} from '../components/sort';
-// import {BtnLoadMore} from '../components/load-more';
-// import {TasksCount} from '../main';
-
 import TaskController, {Mode as TaskControllerMode} from './task-controller';
-
-// import {createTask} from '../data';
-// import {render, removeElement, Position, unrender} from '../utils';
-
-// const TaskControllerMode = Mode;
 
 export default class TaskListController {
   constructor(container, onDataChange) {
@@ -19,6 +7,9 @@ export default class TaskListController {
     this._creatingTask = null;
     this._subscriptions = [];
     this._tasks = null;
+
+    this._onDataChange = this._onDataChange.bind(this);
+    this._onChangeView = this._onChangeView.bind(this);
   }
 
   setTasks(tasks) {
@@ -70,7 +61,7 @@ export default class TaskListController {
   }
 
   _renderTask(task) {
-    const taskController = new TaskController(this._tasksContainer, task, TaskControllerMode.DEFAULT, this._onDataChange, this._onChangeView);
+    const taskController = new TaskController(this._container, task, TaskControllerMode.DEFAULT, this._onDataChange, this._onChangeView);
     this._subscriptions.push(taskController.setDefaultView.bind(taskController));
   }
 
@@ -78,16 +69,13 @@ export default class TaskListController {
     let taskIndex = this._tasks.findIndex((it) => it === oldData);
     
     if (newData === null) {
-      this._tasks = [...this._tasks.slice(0, taskIndex), ...this._tasks.slice(taskIndex, this._tasks.length + 1)]
-      // .slice(0, this._countOfShownTasks);
+      this._tasks = [...this._tasks.slice(0, taskIndex), ...this._tasks.slice(taskIndex, this._tasks.length + 1)];
     } else if (oldData === null) {
       this._creatingTask = null;
       this._tasks = [newData, ...this._tasks];
     } else {
       this._tasks[taskIndex] = newData;
     }
-    // this._renderBoard(this._tasks);
-    // this._renderBtnLoadMore();
 
     this.setTasks(this._tasks);
 

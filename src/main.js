@@ -28,8 +28,8 @@ render(menuContainer, menu.getElement(), Position.BEFOREEND);
 render(mainContainer, search.getElement(), Position.BEFOREEND);
 render(mainContainer, filter.getElement(), Position.BEFOREEND);
 
-const boardController = new BoardController(mainContainer, taskMocks);
-boardController.init(taskMocks, filterMocks);
+const taskListController = new BoardController(mainContainer, filterMocks);
+taskListController.show(taskMocks);
 
 render(mainContainer, statistic.getElement(), Position.BEFOREEND);
 statistic.getElement().classList.add(`visually-hidden`);
@@ -47,16 +47,15 @@ menu.getElement().addEventListener(`change`, (evt) => {
   switch (evt.target.id) {
     case tasksId:
       statistic.getElement().classList.add(`visually-hidden`);
-      boardController.show();
+      taskListController.show(taskMocks);
       break;
     case statisticId:
-      boardController.hide();
+      taskListController.hide();
       statistic.getElement().classList.remove(`visually-hidden`);
       break;
     case newTaskId:
-      boardController.createTask();
+      taskListController.createTask();
       menu.getElement().querySelector(`#${tasksId}`).checked = true;
       break;
   }
 });
-
