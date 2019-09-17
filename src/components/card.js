@@ -5,9 +5,7 @@ export class Task extends AbstractComponent {
     color,
     description,
     dueDate,
-    endCount,
     repeatingDays,
-    startCount,
     tags,
   }) {
     super();
@@ -16,8 +14,6 @@ export class Task extends AbstractComponent {
     this._repeatingDays = repeatingDays;
     this._tags = tags;
     this._color = color;
-    this._startCount = startCount;
-    this._endCount = endCount;
   }
 
   getTemplate() {
@@ -57,7 +53,7 @@ export class Task extends AbstractComponent {
               </div>
               <div class="card__hashtag">
                 <div class="card__hashtag-list">
-                  ${Array.from(this._tags).slice(this._startCount, this._startCount + this._endCount).map((tag) => `<span class="card__hashtag-inner">
+                  ${Array.from(this._tags).map((tag) => `<span class="card__hashtag-inner">
                       <span class="card__hashtag-name">#${tag}</span></span>`).join(``)}
                 </div>
               </div>
