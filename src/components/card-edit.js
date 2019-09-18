@@ -258,31 +258,31 @@ export class TaskEdit extends AbstractComponent {
       });
   }
 
-  // block() {
-  //   this.getElement().querySelector(`.card__save`).disabled = true;
-  //   this.getElement().querySelector(`.card__text`).disabled = true;
-  // }
+  block() {
+    this.getElement().querySelector(`.card__save`).disabled = true;
+    this.getElement().querySelector(`.card__text`).disabled = true;
+  }
 
-  // changeSubmitBtnText(text) {
-  //   this.getElement().querySelector(`.card__save`).innerText = text;
-  // }
+  changeSubmitBtnText(text) {
+    this.getElement().querySelector(`.card__save`).innerText = text;
+  }
 
-  // changeDeleteBtnText(text) {
-  //   this.getElement().querySelector(`.card__delete`).innerText = text;
-  // }
+  changeDeleteBtnText(text) {
+    this.getElement().querySelector(`.card__delete`).innerText = text;
+  }
 
-  // unblock() {
-  //   this.getElement().querySelector(`.card__save`).disabled = false;
-  //   this.getElement().querySelector(`.card__text`).disabled = false;
-  // }
+  unblock() {
+    this.getElement().querySelector(`.card__save`).disabled = false;
+    this.getElement().querySelector(`.card__text`).disabled = false;
+  }
 
-  // shake() {
-  //   const ANIMATION_TIMEOUT = 600;
-  //   this.getElement().style.animation = `shake ${ANIMATION_TIMEOUT / 1000}s`;
+  shake() {
+    const ANIMATION_TIMEOUT = 600;
+    this.getElement().style.animation = `shake ${ANIMATION_TIMEOUT / 1000}s`;
 
-  //   setTimeout(() => {
-  //     this.getElement().style.animation = ``;
-  //   }, ANIMATION_TIMEOUT);
-  // }
+    setTimeout(() => {
+      this.getElement().style.animation = ``;
+    }, ANIMATION_TIMEOUT);
+  }
 
 }

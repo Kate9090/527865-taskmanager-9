@@ -26,7 +26,7 @@ export default class BoardController {
     this._onLoadMoreBtnClick = this._onLoadMoreBtnClick.bind(this);
     this._onSortingByType = this._onSortingByType.bind(this);
     this._countOfShownTasks = TasksCount.LOAD;
-    this._taskListController = new TaskListController(this._tasksContainer.getElement(), this._onDataChangeMain.bind(this));
+    this._taskListController = new TaskListController(this._tasksContainer.getElement(), this._onDataChangeMain);
     this._init();
   }
 

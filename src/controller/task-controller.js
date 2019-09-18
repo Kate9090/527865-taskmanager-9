@@ -97,13 +97,13 @@ export default class TaskController {
           isArchive: addToArchive.classList.contains(`card__btn--disabled`) ? true : false,
         };
 
-        this._onDataChange(entry, mode === Mode.DEFAULT ? this._data : null);
+        this._onDataChange(`update`, entry, this._taskEdit);
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
     this._taskEdit.getElement().querySelector(`.card__delete`)
       .addEventListener(`click`, () => {
-        this._onDataChange(null, this._data);
+        this._onDataChange(`delete`, this._data, this._taskEdit);
       });
 
     const addToFavorite = this._taskEdit.getElement().querySelector(`.card__btn--favorites`);
@@ -112,11 +112,13 @@ export default class TaskController {
     addToFavorite.addEventListener(`click`, (e) => {
       e.preventDefault();
       addToFavorite.classList.toggle(`card__btn--disabled`);
+      this._onDataChange(`update`, this._data, this);
     });
 
     addToArchive.addEventListener(`click`, (e) => {
       e.preventDefault();
       addToArchive.classList.toggle(`card__btn--disabled`);
+      this._onDataChange(`update`, this._data, this);
     });
   }
 

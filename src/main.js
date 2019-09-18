@@ -9,7 +9,7 @@ import {Search} from './components/search';
 import {createFilter} from './data';
 import {Position, render, Action, ButtonText} from './utils.js';
 
-// import ModelTasks from './model-tasks';
+import ModelTasks from './model-tasks';
 import {API} from './api';
 
 const mainContainer = document.querySelector(`.main`);
@@ -23,6 +23,7 @@ const api = new API({endPoint: END_POINT, authorization: AUTHORIZATION});
 
 api.getTasks().then((taskMocks) => {
   const updateData = (newTasks) => {
+    console.log(`update`)
     boardController.show(newTasks);
     searchController.setTasks(newTasks);
     statisticsController.setTasks(newTasks);
@@ -108,6 +109,8 @@ api.getTasks().then((taskMocks) => {
   render(mainContainer, filter.getElement(), Position.BEFOREEND);
 
   const taskListController = new BoardController(mainContainer, onDataChange, filterMocks);
+  console.log(Action)
+  console.log(onDataChange)
   taskListController.show(taskMocks);
 
   const statisticsController = new StatisticsController(mainContainer, taskMocks);

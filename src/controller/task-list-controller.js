@@ -8,7 +8,7 @@ export default class TaskListController {
     this._subscriptions = [];
     this._tasks = null;
 
-    this._onDataChange = this._onDataChange.bind(this);
+    this._onDataChange = this._onDataChangeMain.bind(this);
     this._onChangeView = this._onChangeView.bind(this);
   }
 
@@ -62,22 +62,22 @@ export default class TaskListController {
     this._subscriptions.push(taskController.setDefaultView.bind(taskController));
   }
 
-  _onDataChange(newData, oldData) {
-    let taskIndex = this._tasks.findIndex((it) => it === oldData);
+  // _onDataChange(newData, oldData) {
+  //   let taskIndex = this._tasks.findIndex((it) => it === oldData);
 
-    if (newData === null) {
-      this._tasks = [...this._tasks.slice(0, taskIndex), ...this._tasks.slice(taskIndex, this._tasks.length + 1)];
-    } else if (oldData === null) {
-      this._creatingTask = null;
-      this._tasks = [newData, ...this._tasks];
-    } else {
-      this._tasks[taskIndex] = newData;
-    }
+  //   if (newData === null) {
+  //     this._tasks = [...this._tasks.slice(0, taskIndex), ...this._tasks.slice(taskIndex, this._tasks.length + 1)];
+  //   } else if (oldData === null) {
+  //     this._creatingTask = null;
+  //     this._tasks = [newData, ...this._tasks];
+  //   } else {
+  //     this._tasks[taskIndex] = newData;
+  //   }
 
-    this.setTasks(this._tasks);
+  //   this.setTasks(this._tasks);
 
-    this._onDataChangeMain(this._tasks);
-  }
+  //   this._onDataChangeMain(this._tasks);
+  // }
 
   _onChangeView() {
     this._subscriptions.forEach((it) => it());
