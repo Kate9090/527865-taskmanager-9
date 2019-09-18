@@ -13,6 +13,25 @@ export const Position = {
   BEFOREEND: `beforeend`
 };
 
+export const TasksCount = {
+  MAX: 20,
+  LOAD: 8,
+  PARTIALLY_CARDS_COUNT: 6
+};
+
+export const Action = {
+  DELETE: `delete`,
+  CREATE: `create`,
+  UPDATE: `update`
+};
+
+export const ButtonText = {
+  SAVING: `Saving....`,
+  DELETING: `Deleting....`,
+  SAVE: `Save`,
+  DELETE: `Delete`
+};
+
 export const render = (container, element, place) => {
   switch (place) {
     case Position.AFTERBEGIN:
