@@ -3,7 +3,7 @@ import {TasksContainer} from '../components/board-tasks';
 import {TaskListEmpty} from '../components/card-list-empty';
 import {Sort} from '../components/sort';
 import {BtnLoadMore} from '../components/load-more';
-import {TasksCount} from '../main';
+import {TasksCount} from '../utils';
 
 import TaskListController from './task-list-controller';
 import {render, Position, unrender} from '../utils';
@@ -21,12 +21,12 @@ export default class BoardController {
     this._mainContainer = document.querySelector(`.main`);
 
     this._subscriptions = [];
-    this._onDataChange = this._onDataChange.bind(this);
+    // this._onDataChange = this._onDataChange.bind(this);
     this._onChangeView = this._onChangeView.bind(this);
     this._onLoadMoreBtnClick = this._onLoadMoreBtnClick.bind(this);
     this._onSortingByType = this._onSortingByType.bind(this);
     this._countOfShownTasks = TasksCount.LOAD;
-    this._taskListController = new TaskListController(this._tasksContainer.getElement(), this._onDataChange.bind(this));
+    this._taskListController = new TaskListController(this._tasksContainer.getElement(), this._onDataChangeMain.bind(this));
     this._init();
   }
 
@@ -64,13 +64,13 @@ export default class BoardController {
     this._taskListController.setTasks(tasks.slice(0, this._countOfShownTasks));
   }
 
-  _onDataChange(tasks) {
-    this._tasks = tasks;
+  // _onDataChange(tasks) {
+  //   this._tasks = tasks;
 
-    this._onDataChangeMain(this._tasks);
-    this._renderBoard(this._tasks);
-    this._renderBtnLoadMore();
-  }
+  //   this._onDataChangeMain(this._tasks);
+  //   this._renderBoard(this._tasks);
+  //   this._renderBtnLoadMore();
+  // }
 
   _onChangeView() {
     this._subscriptions.forEach((it) => it());

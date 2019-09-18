@@ -52,10 +52,7 @@ export default class TaskListController {
         this._container,
         defaultTask,
         TaskControllerMode.ADD,
-        (...args) => {
-          this._creatingTask = null;
-          this._onDataChange(...args);
-        },
+        this._onDataChange,
         this._onChangeView
     );
   }

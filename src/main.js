@@ -7,16 +7,10 @@ import {Filter} from './components/filter';
 import {Search} from './components/search';
 
 import {createFilter} from './data';
-import {Position, render} from './utils.js';
+import {Position, render, Action, ButtonText} from './utils.js';
 
 // import ModelTasks from './model-tasks';
 import {API} from './api';
-
-export const TasksCount = {
-  MAX: 20,
-  LOAD: 8,
-  PARTIALLY_CARDS_COUNT: 6
-};
 
 const mainContainer = document.querySelector(`.main`);
 // let taskMocks = new Array(TasksCount.MAX).fill(``).map(createTask);
@@ -30,13 +24,56 @@ const api = new API({endPoint: END_POINT, authorization: AUTHORIZATION});
 api.getTasks().then((taskMocks) => {
   const updateData = (newTasks) => {
     boardController.show(newTasks);
-    // filterController.filterChange(newTasks);
     searchController.setTasks(newTasks);
     statisticsController.setTasks(newTasks);
+    statisticsController.hide();
   };
-  
-  const onDataChange = (tasks) => {
-    taskMocks = tasks;
+  const onDataChange = (actionType, update, element) => {
+    switch (actionType) {
+      case Action.UPDATE:
+        element.block();
+        element.changeSubmitBtnText(ButtonText.SAVING);
+        api.updateTask({
+          id: update.id,
+          data: ModelTasks.toRAW(update)
+        })
+          .then(() => api.getTasks())
+          .then((data) => updateData(data))
+          .catch(() => {
+            element.shake();
+            element.unblock();
+            element.changeSubmitBtnText(ButtonText.SAVE);
+          });
+        break;
+      case Action.DELETE:
+        element.block();
+        element.changeDeleteBtnText(ButtonText.DELETING);
+        api.deleteTask({
+          id: update.id
+        })
+          .then(() => api.getTasks())
+          .then((data) => updateData(data))
+          .catch(() => {
+            element.shake();
+            element.unblock();
+            element.changeDeleteBtnText(ButtonText.DELETE);
+          });
+        break;
+      case Action.CREATE:
+        element.block();
+        element.changeSubmitBtnText(ButtonText.SAVING);
+        api.createTask({
+          task: ModelTasks.toRAW(update)
+        })
+          .then(() => api.getTasks())
+          .then((data) => updateData(data))
+          .catch(() => {
+            element.shake();
+            element.unblock();
+            element.changeSubmitBtnText(ButtonText.SAVE);
+          });
+        break;
+    }
   };
 
   const menu = new Menu();
@@ -51,6 +88,8 @@ api.getTasks().then((taskMocks) => {
     if (evt.target.tagName !== `LABEL`) {
       return;
     }
+
+    statisticsController.hide();
 
     const filterParam = filterMocks.find((item) => item.title === evt.target.getAttribute(`for`)).flagName;
 
