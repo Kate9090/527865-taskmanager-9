@@ -57,7 +57,6 @@ export default class BoardController {
   }
 
   _renderBoard(tasks) {
-    console.log(tasks)
     render(this._board.getElement(), this._tasksContainer.getElement(), Position.BEFOREEND);
 
     this._renderBtnLoadMore();
@@ -141,11 +140,9 @@ export default class BoardController {
   _setTasks(tasks) {
     this._tasks = tasks;
     this._countOfShownTasks = TasksCount.LOAD;
-
+    this._renderBoard(this._tasks);
     if (this._notCompletedTasksCount(this._tasks)) {
       this._renderEmptyTasksList();
-    } else {
-      this._renderBoard(this._tasks);
     }
   }
 }

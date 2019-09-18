@@ -8,6 +8,13 @@ export default class ModelTasks {
       this.color = data[`color`];
       this.isFavorite = Boolean(data[`is_favorite`]);
       this.isArchive = Boolean(data[`is_archived`]);
+      this.isToday = () => {
+        if (new Date(this.dueDate) > Date.now()) {
+          return true;
+        }
+        return false;
+      };
+      this.isOverdue = !this.isToday;
     }
   
     static parseTask(data) {

@@ -6,21 +6,21 @@ import {Menu} from './components/menu';
 import {Filter} from './components/filter';
 import {Search} from './components/search';
 
-import {createTask, createFilter} from './data';
+import {createFilter} from './data';
 import {Position, render} from './utils.js';
 
-import ModelTasks from './model-tasks';
+// import ModelTasks from './model-tasks';
 import {API} from './api';
 
 export const TasksCount = {
   MAX: 20,
-  LOAD: 6,
+  LOAD: 8,
   PARTIALLY_CARDS_COUNT: 6
 };
 
 const mainContainer = document.querySelector(`.main`);
-let taskMocks = new Array(TasksCount.MAX).fill(``).map(createTask);
-const filterMocks = createFilter(taskMocks);
+// let taskMocks = new Array(TasksCount.MAX).fill(``).map(createTask);
+
 const menuContainer = mainContainer.querySelector(`.main__control`);
 
 const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=${Math.random()}`;
@@ -41,7 +41,9 @@ api.getTasks().then((taskMocks) => {
 
   const menu = new Menu();
   const search = new Search();
+  const filterMocks = createFilter(taskMocks);
   const filter = new Filter(filterMocks);
+  
 
   filter.getElement().addEventListener(`click`, (evt) => {
     evt.preventDefault();
@@ -71,6 +73,7 @@ api.getTasks().then((taskMocks) => {
 
   const statisticsController = new StatisticsController(mainContainer, taskMocks);
   statisticsController.hide();
+
   const onSearchBackButtonClick = () => {
     statisticsController.hide();
     searchController.hide();
@@ -79,7 +82,7 @@ api.getTasks().then((taskMocks) => {
   const searchController = new SearchController(mainContainer, search, onSearchBackButtonClick);
 
   search.getElement().addEventListener(`click`, () => {
-    statisticsController.show(taskMocks);
+    statisticsController.hide();
     taskListController.hide();
     searchController.show(taskMocks);
   });
@@ -98,13 +101,18 @@ api.getTasks().then((taskMocks) => {
       case tasksId:
         statisticsController.hide();
         taskListController.show(taskMocks);
+        searchController.hide();
         break;
       case statisticId:
         taskListController.hide();
         statisticsController.show(taskMocks);
+        searchController.hide();
         break;
       case newTaskId:
+        taskListController.show(taskMocks);
         taskListController.createTask();
+        statisticsController.hide();
+        searchController.hide();
         menu.getElement().querySelector(`#${tasksId}`).checked = true;
         break;
     }
