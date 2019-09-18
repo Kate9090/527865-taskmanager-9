@@ -9,10 +9,13 @@ import {Search} from './components/search';
 import {createTask, createFilter} from './data';
 import {Position, render} from './utils.js';
 
+import ModelTasks from './model-tasks';
+import {API} from './api';
+
 export const TasksCount = {
   MAX: 20,
-  LOAD: 8,
-  PARTIALLY_CARDS_COUNT: 8
+  LOAD: 6,
+  PARTIALLY_CARDS_COUNT: 6
 };
 
 const mainContainer = document.querySelector(`.main`);
@@ -20,77 +23,90 @@ let taskMocks = new Array(TasksCount.MAX).fill(``).map(createTask);
 const filterMocks = createFilter(taskMocks);
 const menuContainer = mainContainer.querySelector(`.main__control`);
 
-const onDataChange = (tasks) => {
-  taskMocks = tasks;
-};
+const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=${Math.random()}`;
+const END_POINT = `https://htmlacademy-es-9.appspot.com/task-manager`;
+const api = new API({endPoint: END_POINT, authorization: AUTHORIZATION});
 
-const menu = new Menu();
-const search = new Search();
-const filter = new Filter(filterMocks);
-
-filter.getElement().addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-
-  if (evt.target.tagName !== `LABEL`) {
-    return;
-  }
-
-  const filterParam = filterMocks.find((item) => item.title === evt.target.getAttribute(`for`)).flagName;
-
-  if (filterParam === `All`) {
-    taskListController.hide();
-    return taskListController.show(taskMocks);
-  }
+api.getTasks().then((taskMocks) => {
+  const updateData = (newTasks) => {
+    boardController.show(newTasks);
+    // filterController.filterChange(newTasks);
+    searchController.setTasks(newTasks);
+    statisticsController.setTasks(newTasks);
+  };
   
-  const filteredTasks = taskMocks.filter((taskMock) => taskMock[filterParam]);
-  taskListController.hide();
-  taskListController.show(filteredTasks);
-});
+  const onDataChange = (tasks) => {
+    taskMocks = tasks;
+  };
 
-render(menuContainer, menu.getElement(), Position.BEFOREEND);
-render(mainContainer, search.getElement(), Position.BEFOREEND);
-render(mainContainer, filter.getElement(), Position.BEFOREEND);
+  const menu = new Menu();
+  const search = new Search();
+  const filter = new Filter(filterMocks);
 
-const taskListController = new BoardController(mainContainer, onDataChange, filterMocks);
-taskListController.show(taskMocks);
+  filter.getElement().addEventListener(`click`, (evt) => {
+    evt.preventDefault();
 
-const statisticsController = new StatisticsController(mainContainer, taskMocks);
-statisticsController.hide();
-const onSearchBackButtonClick = () => {
-  statisticsController.hide();
-  searchController.hide();
-  taskListController.show(taskMocks);
-};
-const searchController = new SearchController(mainContainer, search, onSearchBackButtonClick);
+    if (evt.target.tagName !== `LABEL`) {
+      return;
+    }
 
-search.getElement().addEventListener(`click`, () => {
-  statisticsController.show(taskMocks);
-  taskListController.hide();
-  searchController.show(taskMocks);
-});
+    const filterParam = filterMocks.find((item) => item.title === evt.target.getAttribute(`for`)).flagName;
 
-menu.getElement().addEventListener(`change`, (evt) => {
-  evt.preventDefault();
-  if (evt.target.tagName !== `INPUT`) {
-    return;
-  }
-
-  const tasksId = `control__task`;
-  const statisticId = `control__statistic`;
-  const newTaskId = `control__new-task`;
-
-  switch (evt.target.id) {
-    case tasksId:
-      statisticsController.hide();
-      taskListController.show(taskMocks);
-      break;
-    case statisticId:
+    if (filterParam === `All`) {
       taskListController.hide();
-      statisticsController.show(taskMocks);
-      break;
-    case newTaskId:
-      taskListController.createTask();
-      menu.getElement().querySelector(`#${tasksId}`).checked = true;
-      break;
-  }
-});
+      return taskListController.show(taskMocks);
+    }
+    
+    const filteredTasks = taskMocks.filter((taskMock) => taskMock[filterParam]);
+    taskListController.hide();
+    taskListController.show(filteredTasks);
+  });
+
+  render(menuContainer, menu.getElement(), Position.BEFOREEND);
+  render(mainContainer, search.getElement(), Position.BEFOREEND);
+  render(mainContainer, filter.getElement(), Position.BEFOREEND);
+
+  const taskListController = new BoardController(mainContainer, onDataChange, filterMocks);
+  taskListController.show(taskMocks);
+
+  const statisticsController = new StatisticsController(mainContainer, taskMocks);
+  statisticsController.hide();
+  const onSearchBackButtonClick = () => {
+    statisticsController.hide();
+    searchController.hide();
+    taskListController.show(taskMocks);
+  };
+  const searchController = new SearchController(mainContainer, search, onSearchBackButtonClick);
+
+  search.getElement().addEventListener(`click`, () => {
+    statisticsController.show(taskMocks);
+    taskListController.hide();
+    searchController.show(taskMocks);
+  });
+
+  menu.getElement().addEventListener(`change`, (evt) => {
+    evt.preventDefault();
+    if (evt.target.tagName !== `INPUT`) {
+      return;
+    }
+
+    const tasksId = `control__task`;
+    const statisticId = `control__statistic`;
+    const newTaskId = `control__new-task`;
+
+    switch (evt.target.id) {
+      case tasksId:
+        statisticsController.hide();
+        taskListController.show(taskMocks);
+        break;
+      case statisticId:
+        taskListController.hide();
+        statisticsController.show(taskMocks);
+        break;
+      case newTaskId:
+        taskListController.createTask();
+        menu.getElement().querySelector(`#${tasksId}`).checked = true;
+        break;
+    }
+  });
+})

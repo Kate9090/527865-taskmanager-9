@@ -57,6 +57,7 @@ export default class BoardController {
   }
 
   _renderBoard(tasks) {
+    console.log(tasks)
     render(this._board.getElement(), this._tasksContainer.getElement(), Position.BEFOREEND);
 
     this._renderBtnLoadMore();
